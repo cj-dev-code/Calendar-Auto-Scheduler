@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 # Create your models here.
-<<<<<<< HEAD
 
 class GenericTask(models.Model):
     
@@ -34,13 +33,3 @@ class GenericHourBlock(models.Model):
         options = GenericActiveTask.objects.all()
         selection = [x for ]
         
-=======
-from django.urls import reverse
-
-class Article(models.Model):
-    title = models.CharField(max_length=200)
-    pub_date = models.DateField()
-
-    def get_absolute_url(self):
-        return reverse('archive_week', kwargs={'pk': self.pk})
->>>>>>> 56435d8 (Added the calendar.html)
