@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 """project URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
 Examples:
@@ -14,17 +12,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
-
-from . import views
-
-app_name = 'calendarauto'
-urlpatterns = [
-    path('', views.CalendarView, name='calendar'), # Assume right now aliu doesn't use a generic view
-    path('Todo', views.TodoView, name='todo'),
-    path('Mystery', views.MysteryView, name='mystery')
-]
-=======
 from django.urls import include, path
 
 from . import views
@@ -32,5 +19,7 @@ from . import views
 urlpatterns = [
     path('', views.calendarView, name='temp_view'),
     path('<int:year>/<int:month>/week/<int:week>/', views.calendarView, name='calendar_view'),
+    path('', views.CalendarView, name='calendar'), # Assume right now aliu doesn't use a generic view
+    path('Todo', views.TodoView, name='todo'),
+    path('Mystery', views.MysteryView, name='mystery'),
 ]
->>>>>>> 56435d8 (Added the calendar.html)
