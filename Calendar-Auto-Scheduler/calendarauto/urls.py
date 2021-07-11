@@ -16,6 +16,7 @@ from django.urls import include, path
 
 from . import views
 
+app_name = 'calendarauto'
 urlpatterns = [
     path('', views.calendarView, name='temp_view'),
     path('<int:year>/<int:month>/week/<int:week>/', views.calendarView, name='calendar_view'),
