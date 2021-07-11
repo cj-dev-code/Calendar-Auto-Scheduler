@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html onClick="showCoords(event)">
+    <!-- Does load it is the name in the tab -->
+    <head>
+        <meta charset="utf-8">
+        <title>My test page</title>
+    </head>
+    <!-- Loads everything after this -->
+    <body>
+        {% load static %}
+    
+        <!-- Currently does not work fix later -->
+        <link type="text/javascript" href="{% static 'autocalendar/test.js' %}">
+    
+        
+        <h1>Week {{ week|date:'W' }}</h1>
+    
+        <!--
+        <ul id="firstList" >
+            {% for article in object_list %}
+                <li>{{ article.pub_date|date:"F j, Y" }}: {{ article.title }}</li>
+            {% endfor %}
+        </ul> 
+        -->
+        
+        
+    
+        <canvas id="myCanvas" height="750" style="border:1px solid #c3c3c3;" onClick="showDay(event)">
+            Your browser does not support the canvas element.
+        </canvas>
+        <p id="demo"></p>
+        <p id="temp"></p>
+    
+        <script>
+            function showCoords(event) {
+                var x = event.clientX;
+                var y = event.clientY;
+                var coords = "X coords: " + x + ", Y coords: " + y;
+                document.getElementById("demo").innerHTML = coords;
+            }
+            <!-- Creates the horizontal lines in the canvas -->
+            var canvas = document.getElementById("myCanvas");
+            
+            
+            
+            
+            canvas.width = window.screen.width - 30;
+            var ctx = canvas.getContext("2d");
+            var num_days = 7;
+            for (let i = 0; i < num_days + 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo((canvas.width/9)*i, 0);
+                ctx.lineTo((canvas.width/9)*i, canvas.height);
+                ctx.stroke();
+            }
+            
+            <!-- Adds the top labels to the calendar -->
+            const week_day_labels = ["Sunday","Monday","Tuesday", "Wednesday","Thursday","Friday","Saturday"];
+            var label_line_height = 30;
+            ctx.font = "25px Arial";
+            ctx.strokeText("<- Previous", 0, label_line_height - 5);
+            for (let i = 1; i <= week_day_labels.length; i++) {
+                ctx.strokeText(week_day_labels[i-1], (canvas.width/9)*i, label_line_height - 5);
+            }
+            ctx.strokeText("Next ->", (canvas.width/9)*8, label_line_height - 5);
+            
+            <!-- Adds the time on the left -->
+            for (let i = 1; i <= 11; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, label_line_height + 30 * (i - 1));
+                ctx.lineTo(canvas.width, label_line_height + 30 * (i - 1));
+                ctx.stroke();
+                ctx.strokeText(i + "am", 0, label_line_height + 30*i - 4);
+            }
+            
+            <!-- 11am and 12pm line -->
+            ctx.beginPath();
+            ctx.moveTo(0, label_line_height + 30 * 11);
+            ctx.lineTo(canvas.width, label_line_height + 30 * 11);
+            ctx.stroke();
+            ctx.strokeText("12pm", 0, label_line_height + 30*12 - 4);
+            
+            for (let i = 1; i <= 11; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, label_line_height + 30 * (12 + i - 1));
+                ctx.lineTo(canvas.width, label_line_height + 30 * (12 + i - 1));
+                ctx.stroke();
+                ctx.strokeText(i + "pm", 0, label_line_height + 30*(i + 12) - 4);
+            }
+            
+            <!-- 11pm and 12am -->
+            ctx.beginPath();
+            ctx.moveTo(0, label_line_height + 30 * 23);
+            ctx.lineTo(canvas.width, label_line_height + 30 * 23);
+            ctx.stroke();
+            ctx.strokeText("12am", 0, label_line_height + 30*24 - 4);
+            
+            function showDay(event) {
+                var rect = document.getElementById("myCanvas").getBoundingClientRect();
+                var x = event.clientX - rect.left;
+                var y = event.clientY - rect.top;
+                switch (Math.floor(x / (canvas.width/9))) {
+                    case 1:
+                        document.getElementById("temp").innerHTML = "1am"}
+                switch (Math.floor(x / (canvas.width/9))) {
+                    case 1:
+                        document.getElementById("temp").innerHTML = "Sunday";
+                        break;
+                    case 2:
+                        document.getElementById("temp").innerHTML = "Monday";
+                        break;
+                    case 3:
+                        document.getElementById("temp").innerHTML = "Tuesday";
+                        break;
+                    case 4:
+                        document.getElementById("temp").innerHTML = "Wednesday";
+                        break;
+                    case 5:
+                        document.getElementById("temp").innerHTML = "Thursday";
+                        break;
+                    case 6:
+                        document.getElementById("temp").innerHTML = "Friday";
+                        break;
+                    case 7:
+                        document.getElementById("temp").innerHTML = "Saturday";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            
+            
+        </script>
+    
+        <!--
+        <ul>
+            {% for article in object_list %}
+                <li>{{ article.pub_date|date:"F j, Y" }}: {{ article.title }}</li>
+            {% endfor %}
+        </ul>
+        -->
+    
+        <!-- 
+        <p>
+            {% if previous_week %}
+                Previous Week: {{ previous_week|date:"W" }} of year {{ previous_week|date:"Y" }}
+            {% endif %}
+            {% if previous_week and next_week %}--{% endif %}
+            {% if next_week %}
+                Next week: {{ next_week|date:"W" }} of year {{ next_week|date:"Y" }}
+            {% endif %}
+        </p>
+        -->
+    
+    </body>
+</html>

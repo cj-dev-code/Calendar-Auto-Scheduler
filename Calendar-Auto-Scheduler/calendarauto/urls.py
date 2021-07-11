@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """project URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -23,3 +24,13 @@ urlpatterns = [
     path('Todo', views.TodoView, name='todo'),
     path('Mystery', views.MysteryView, name='mystery')
 ]
+=======
+from django.urls import include, path
+
+from . import views
+
+urlpatterns = [
+    path('', views.calendarView, name='temp_view'),
+    path('<int:year>/<int:month>/week/<int:week>/', views.calendarView, name='calendar_view'),
+]
+>>>>>>> 56435d8 (Added the calendar.html)
