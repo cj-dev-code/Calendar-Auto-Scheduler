@@ -24,14 +24,7 @@ class GenericHourBlock(models.Model):
     isFilled = models.BooleanField(default=False)
     current_task = models.ForeignKey(GenericTask, ondelete=models.CASCADE)
     def populate(self):
-<<<<<<< Updated upstream
-        options = GenericActiveTask.objects.all()
-        selection = [x for ]
-        
-=======
         options = GenericTask.objects.all()
         selection = [x.id for x in options]
         refined_options = GenericTask.filter(id__in = selection)
         self.current_task = refined_options.earliest()
-    
->>>>>>> Stashed changes
