@@ -3,7 +3,6 @@ from django.utils import timezone
 # Create your models here.
 
 class GenericTask(models.Model):
-    
     task_name = models.CharField(max_length=100)
     task_description = models.CharField(max_length=300)
     deadline = models.DateTimeField('Deadline')
@@ -17,19 +16,22 @@ class GenericTask(models.Model):
 
     def get_starting_deadline(self):
         return self.deadline - self.est_time_to_complete
-    
-class GenericActiveTask(GenericTask):
-    pass
-class GenericInactiveTask(GenericTask):
-    pass
-
+    class Meta:
+        get_latest_by = 'publication_date'
 class GenericHourBlock(models.Model):
     hour_type = models.CharField(max_length=2, default='BL') # The type of the hour
     datetime = models.DateTimeField('Hour Representative')
     isFilled = models.BooleanField(default=False)
     current_task = models.ForeignKey(GenericTask, ondelete=models.CASCADE)
-    
     def populate(self):
+<<<<<<< Updated upstream
         options = GenericActiveTask.objects.all()
         selection = [x for ]
         
+=======
+        options = GenericTask.objects.all()
+        selection = [x.id for x in options]
+        refined_options = GenericTask.filter(id__in = selection)
+        self.current_task = refined_options.earliest()
+    
+>>>>>>> Stashed changes
