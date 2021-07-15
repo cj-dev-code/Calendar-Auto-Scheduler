@@ -27,9 +27,9 @@ class GenericHourBlock(models.Model):
     hour_type = models.CharField(max_length=2, default='BL') # The type of the hour
     datetime = models.DateTimeField('Hour Representative')
     isFilled = models.BooleanField(default=False)
-    current_task = models.ForeignKey(GenericTask, ondelete=models.CASCADE)
+    current_task = models.ForeignKey(GenericTask, on_delete=models.CASCADE)
     
-    def populate(self):
-        options = GenericActiveTask.objects.all()
-        selection = [x for ]
+    #def populate(self):
+    #    options = GenericActiveTask.objects.all()
+    #    selection = [x for ]
         
