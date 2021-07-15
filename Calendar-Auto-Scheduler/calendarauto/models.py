@@ -25,6 +25,7 @@ class GenericTask(models.Model):
         return self.deadline - timedelta(hours = self.est_time_to_complete.hour)
     class Meta:
         get_latest_by = 'time_created'
+
 class GenericHourBlock(models.Model):
     hour_type = models.CharField(max_length=2, default='BL') # The type of the hour
     datetime = models.DateTimeField('Hour Representative')
@@ -46,3 +47,4 @@ class GenericHourBlock(models.Model):
             return self.current_task
         else:
             return None
+    

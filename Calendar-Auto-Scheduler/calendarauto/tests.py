@@ -1,13 +1,10 @@
 from django.test import TestCase
 # Create your tests here.
 #6:43-6:47
-from datetime import timedelta
 from datetime import datetime, time
-from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 from .models import GenericTask, GenericHourBlock
-
 import sys 
 
 def create_generic_task(deadline, hours_to_complete,
@@ -149,19 +146,3 @@ class GenericHourBlockTests(TestCase):
         hourblock.populate()
         
         self.assertIs(hourblock.get_current_task().id,gtask2.id)
-        
-    
-    
-
-#class QuestionModelTests(TestCase):
-'''
-def test_was_published_recently_with_old_question(self):
-    time = timezone.now() - datetime.timedelta(days=30)
-    old_question = Question(pub_date = time, text='CRABS')
-    self.assertIs(old_question.was_published_recently(), True)
-
-def test_was_published_recently_with_recent_question(self):
-    time = timezone.now() - datetime.timedelta(hours=23, minutes=49, seconds=59)
-    recent_question = Question(pub_date = time)
-    self.assertIs(recent_question.was_published_recently(), True)
-'''
