@@ -19,8 +19,12 @@ from . import views
 app_name = 'calendarauto'
 urlpatterns = [
     path('', views.CalendarView, name='temp_view'),
+<<<<<<< HEAD
+    path('<int:year>/<int:month>/<int:day>/', views.CalendarView, name='calendar_view'),
+=======
     path('<int:year>/<int:month>/week/<int:week>/', views.CalendarView, name='calendar_view'),
+>>>>>>> 83fb07511f767675616159fd872ed54bc1d62e6e
     path('', views.CalendarView, name='calendar'), # Assume right now aliu doesn't use a generic view
     path('Todo', views.TodoView, name='todo'),
-    path('Mystery', views.MysteryView, name='mystery'),
+    #path('Mystery', views.MysteryView, name='mystery'),
 ]
