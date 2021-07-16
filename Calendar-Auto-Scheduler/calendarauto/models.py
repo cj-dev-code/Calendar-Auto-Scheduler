@@ -32,11 +32,6 @@ class GenericHourBlock(models.Model):
     isFilled = models.BooleanField(default=False)
     current_task = models.ForeignKey(GenericTask, on_delete=models.CASCADE)
     
-<<<<<<< HEAD
-    #def populate(self):
-    #    options = GenericActiveTask.objects.all()
-    #    selection = [x for ]
-=======
     def __str__(self):
         return self.hour_type + str(self.get_current_task())
     def populate(self):
@@ -46,8 +41,7 @@ class GenericHourBlock(models.Model):
         refined_options = options.filter(id__in = selection)
         if len(refined_options):
             self.current_task = refined_options.earliest()
->>>>>>> 83fb07511f767675616159fd872ed54bc1d62e6e
-        
+            
     def get_current_task(self):
         if hasattr(self, 'current_task'):
             return self.current_task

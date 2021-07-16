@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 
-<<<<<<< HEAD
+
 import datetime
 
 
@@ -16,11 +16,6 @@ import datetime
 # If the url is going to use varibles, then they must be listed here
 # in the function name if it is a custom view i.e. what we have here
 def CalendarView(request, year, month, day):
-=======
-# If the url is going to use varibles, then they must be listed here
-# in the function name if it is a custom view i.e. what we have here
-def CalendarView(request, year, month, week):
->>>>>>> 83fb07511f767675616159fd872ed54bc1d62e6e
     #template_name = 'calendarauto/calendar.html'
     #queryset = Article.objects.all()
     #date_field = "pub_date"

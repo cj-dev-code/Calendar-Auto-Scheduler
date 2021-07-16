@@ -1,10 +1,10 @@
 * {
-    box-sizeing: border-box;
+    box-sizing: border-box;
 }
 
 .openBtn {
-    diaply: flex;
-    justify-content: left;
+    display: flex;
+    /* justify-content: left; */
 }
 
 .openButton {
@@ -14,11 +14,11 @@
     color: white;
     padding: 14px 20px;
     cursor: pointer;
-    position: fixed;
+    /* position: fixed; */
 }
 
 
-.loginPopup {
+.addTaskPopup {
     position: relative;
     text-align: center;
     width: 100%;
@@ -27,20 +27,34 @@
 .formPopup {
     display: none;
     position: fixed;
-    left: 45%;
-    top: 5%;
+    left: 50%;
+    top: 0%;
     transform: translate(-50%, 5%);
     border: 3px solid #999999;
     z-index: 9;
 }
 
 .formContainer {
-    max-width: 300px;
+    max-width: 500px;
     padding: 20px;
     background-color: #fff;
 }
+.formContainer input[type=text],
+.formContainer input[type=text],
+.formContainer input[type=datetime-local],
+.formContainer input[type=datetime-local],
+.formContainer input[type=number] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 20px 0;
+    border: none;
+    background: #eee;
+}
 .formContainer input[type=text]:focus,
-.formContainer input[type=password]:focus {
+.formContainer input[type=text]:focus,
+.formContainer input[type=datetime-local]:focus,
+.formContainer input[type=datetime-local]:focus,
+.formContainer input[type=number]:focus {
     background-color: #ddd;
     outline: none;
 }
@@ -52,16 +66,14 @@
     color: #fff;
     cursor: pointer;
     width: 100%;
-    margin-bottom: 15 px;
-    opacity:0.8;
+    margin-bottom: 15px;
+    opacity: 0.8;
 }
 
-.formContainer .cance; {
+.formContainer .cancel {
     background-color: #cc0000;
 }
-
 .formContainer .btn:hover,
 .openButton:hover {
     opacity: 1;
 }
-

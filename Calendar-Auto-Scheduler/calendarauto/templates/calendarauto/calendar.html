@@ -16,35 +16,36 @@
         <!-- Looks for the month variable and year variables
              sent in as contextes from the render in the views module
         --> 
-        <h1>Week of {{ sunday|date:"F j, Y" }} - {{ saturday|date:"F j, Y" }}</h1>
+        <h1>Week of {{ sunday|date:"F j, Y" }} - {{ saturday|date:"F j, Y" }} 
+            <!-- <div class="openBtn"> -->
+                <button class="openButton" onclick="openForm()"><strong>Create New Task</strong></button>
+            <!-- </div> -->
+        </h1>
     
-        <div class="openBtn">
-            <button class="openButton" onclick="openForm()"><strong>Open Form</strong></button>
-        </div>
-        <div class="loginPopup">
+        <div class="addTaskPopup">
             <div class="formPopup" id="popupForm">
                 <form action="/action_page.php" class="formContainer">
                     <h2>Popup Windows</h2>
-                    <label for="email">
+                    <label for="task_name">
                         <strong>Task Name</strong>
                     </label>
-                    <input type="text" id="email" placeholder="Your Email" name="email" required>
-                    <label for="psw">
+                    <input type="text" id="task_name" placeholder="Your Task Name" name="task_name" required>
+                    <label for="task_desc">
                         <strong>Task Description</strong>
                     </label>
-                    <input type="text" id="psw" placeholder="Your Password" name="psw" required>
-                    <label for="psw">
+                    <input type="text" id="task_desc" placeholder="Your Task Description" name="task_desc" required>
+                    <label for="start_time">
                         <strong>Start Time</strong>
                     </label>
-                    <input type="date" id="psw" placeholder="Your Password" name="psw" required>
-                    <label for="psw">
+                    <input type="datetime-local" id="start_time" name="start_time" required>
+                    <label for="end_time">
                         <strong>End Time</strong>
                     </label>
-                    <input type="date" id="psw" placeholder="Your Password" name="psw" required>
-                    <label for="psw">
+                    <input type="datetime-local" id="end_time" name="end_time" required>
+                    <label for="duration">
                         <strong>Duration</strong>
                     </label>
-                    <input type="text" id="psw" placeholder="Your Password" name="psw" required>
+                    <input type="number" id="duration" placeholder="Duration Length" name="duration" step="0.01" required>
                     <button type="submit" class="btn">Log in</button>
                     <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
                 </form>
