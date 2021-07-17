@@ -41,7 +41,6 @@ class GenericHourBlock(models.Model):
         refined_options = options.filter(id__in = selection)
         if len(refined_options):
             self.current_task = refined_options.earliest()
-            
     def get_current_task(self):
         if hasattr(self, 'current_task'):
             return self.current_task

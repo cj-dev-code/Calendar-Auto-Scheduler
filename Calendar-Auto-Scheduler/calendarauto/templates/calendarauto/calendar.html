@@ -1,6 +1,6 @@
 {% load static %}
-
 <!DOCTYPE html>
+
 <html onClick="showCoords(event)">
     <!-- Does load it is the name in the tab -->
     <head>
@@ -11,8 +11,6 @@
     </head>
     <!-- Loads everything after this -->
     <body>
-        
-    
         <!-- Looks for the month variable and year variables
              sent in as contextes from the render in the views module
         --> 
@@ -24,7 +22,8 @@
     
         <div class="addTaskPopup">
             <div class="formPopup" id="popupForm">
-                <form action="/action_page.php" class="formContainer">
+                <form action="{% url 'calendarauto:add_new_task' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" method=post> 
+                    {% csrf_token %}
                     <h2>Popup Windows</h2>
                     <label for="task_name">
                         <strong>Task Name</strong>
@@ -51,17 +50,10 @@
                 </form>
             </div>
         </div>
-        
-        
-    
         <canvas id="myCanvas" height="750" style="border:1px solid #c3c3c3;" onClick="showDay(event)">
             Your browser does not support the canvas element.
         </canvas>
         <p id="demo"></p>
         <p id="temp"></p>
-    
-
-        
-    
     </body>
 </html>
