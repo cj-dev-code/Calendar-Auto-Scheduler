@@ -23,6 +23,11 @@
     text-align: center;
     width: 100%;
 }
+.schedulePopup {
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
 
 .formPopup {
     display: none;

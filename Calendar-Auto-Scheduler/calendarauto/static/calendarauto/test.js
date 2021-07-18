@@ -13,12 +13,21 @@ function closeForm() {
     document.getElementById("popupForm").style.display = "none";
 }
 
+function openScheduleForm() {
+    document.getElementById("schedulepopupForm").style.display = "block";
+}
+
+function closeScheduleForm() {
+    document.getElementById("schedulepopupForm").style.display = "none";
+}
 
 function showDay(event) {
     var canvas = document.getElementById("myCanvas");
     var rect = canvas.getBoundingClientRect();
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
+    
+    openScheduleForm();
     
     
     if ((y < 30) && (x < Math.floor(canvas.width/9))) {
@@ -74,6 +83,8 @@ function showDay(event) {
     switch (Math.floor(y / 30)) {
         case 1:
             document.getElementById("temp").innerHTML = "1am";
+            document.getElementById("start_hour").value = "1am";
+            console.log("HIT");
             break;
         case 2:
             document.getElementById("temp").innerHTML = "2am";
@@ -150,6 +161,7 @@ function showDay(event) {
     switch (Math.floor(x / (canvas.width/9))) {
         case 1:
             document.getElementById("temp").innerHTML += "Sunday";
+            document.getElementById("end_hour").value = "2am";
             break;
         case 2:
             document.getElementById("temp").innerHTML += "Monday";
