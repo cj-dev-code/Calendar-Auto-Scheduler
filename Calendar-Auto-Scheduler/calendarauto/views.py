@@ -6,8 +6,6 @@ from django.template import loader
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-
-
 import datetime
 
 
@@ -49,19 +47,10 @@ def CalendarView(request, year, month, day):
 class TodoView(generic.ListView):
     template_name = 'calendarauto/todolist.html'
     
-    
 def MysteryView(request):
-    #template_name = 'calendarauto/calendar.html'
-    #queryset = Article.objects.all()
-    #date_field = "pub_date"
-    #week_format = "%W"
-    #allow_future = True
-    #try:
-    #    article = Article.objects.get(pk=question_id)
-    #except Article.DoesNotExist:
-    #    raise Http404("Article does not exist")
     return render(request, 'calendarauto/calendar.html')
     
-    
-#def mysteryView():
-    
+def add_new_task(request,year, month, day):
+    print(str(request.POST))
+    print("Hello world")
+    return HttpResponseRedirect(reverse('calendarauto:calendar_view',args=(year, month,day)))#'calendarauto:calendarauto', args=(year, month,day)))
