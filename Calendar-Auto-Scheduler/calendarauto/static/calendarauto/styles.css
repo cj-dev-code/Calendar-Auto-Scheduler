@@ -2,6 +2,12 @@
     box-sizing: border-box;
 }
 
+.calendar {
+    position: relative;
+    left: 40px;
+    border: 1px solid #c3c3c3;
+}
+
 .openBtn {
     display: flex;
     /* justify-content: left; */
@@ -39,32 +45,28 @@
     z-index: 9;
 }
 
-.formContainer {
+.addFormContainer {
     max-width: 500px;
     padding: 20px;
     background-color: #fff;
 }
-.formContainer input[type=text],
-.formContainer input[type=text],
-.formContainer input[type=datetime-local],
-.formContainer input[type=datetime-local],
-.formContainer input[type=number] {
+.addFormContainer input[type=text],
+.addFormContainer input[type=datetime-local],
+.addFormContainer input[type=number] {
     width: 100%;
     padding: 15px;
     margin: 5px 0 20px 0;
     border: none;
     background: #eee;
 }
-.formContainer input[type=text]:focus,
-.formContainer input[type=text]:focus,
-.formContainer input[type=datetime-local]:focus,
-.formContainer input[type=datetime-local]:focus,
-.formContainer input[type=number]:focus {
+.addFormContainer input[type=text]:focus,
+.addFormContainer input[type=datetime-local]:focus,
+.addFormContainer input[type=number]:focus {
     background-color: #ddd;
     outline: none;
 }
 
-.formContainer .btn {
+.addFormContainer .btn {
     padding: 12px 20px;
     border: none;
     background-color: #8ebf42;
@@ -75,10 +77,51 @@
     opacity: 0.8;
 }
 
-.formContainer .cancel {
+.addFormContainer .cancel {
     background-color: #cc0000;
 }
-.formContainer .btn:hover,
+.addFormContainer .btn:hover,
+.openButton:hover {
+    opacity: 1;
+}
+
+.scheFormContainer {
+    max-width: 500px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.scheFormContainer select,
+.scheFormContainer input[type=text] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 20px 0;
+    border: none;
+    background: #eee;
+}
+
+/*.scheFormContainer input[type=text]:focus,
+.scheFormContainer input[type=datetime-local]:focus,
+.scheFormContainer input[type=number]:focus {
+    background-color: #ddd;
+    outline: none;
+}*/
+
+.scheFormContainer .btn {
+    padding: 12px 20px;
+    border: none;
+    background-color: #8ebf42;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.scheFormContainer .cancel {
+    background-color: #cc0000;
+}
+.scheFormContainer .btn:hover,
 .openButton:hover {
     opacity: 1;
 }

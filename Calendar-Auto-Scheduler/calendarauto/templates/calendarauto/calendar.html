@@ -20,16 +20,12 @@
             <!-- </div> -->
         </h1>
     
+        
         <div class="addTaskPopup">
             <div class="formPopup" id="popupForm">
-<<<<<<< HEAD
-                <form action="/action_page.php" class="formContainer">
-                    <h2>Create New Task</h2>
-=======
-                <form action="{% url 'calendarauto:add_new_task' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" method=post> 
+                <form action="{% url 'calendarauto:add_new_task' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" method=post class="addFormContainer"> 
                     {% csrf_token %}
-                    <h2>Popup Windows</h2>
->>>>>>> c4ca4ffa6f9a822af129bf9e2c4fd84fa8dde61f
+                    <h2>Create New Task</h2>
                     <label for="task_name">
                         <strong>Task Name</strong>
                     </label>
@@ -43,56 +39,61 @@
                     </label>
                     <input type="datetime-local" id="start_time" name="start_time" required>
                     <label for="end_time">
-                        <strong>End Time</strong>
+                        <strong>Deadline</strong>
                     </label>
                     <input type="datetime-local" id="end_time" name="end_time" required>
                     <label for="duration">
                         <strong>Duration</strong>
                     </label>
                     <input type="number" id="duration" placeholder="Duration Length" name="duration" step="0.01" required>
-                    <button type="submit" class="btn">Add</button>
-                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                    <input type="submit" class="btn">
+                    <input value="Close" type="button" class="btn cancel" onclick="closeForm()">
                 </form>
             </div>
         </div>
-<<<<<<< HEAD
+        
         
         <div class="schedulePopup">
             <div class="formPopup" id="schedulepopupForm">
-                <form action="/action_page.php" class="formContainer">
+                <form action="{% url 'calendarauto:add_new_task' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" class="scheFormContainer">
                     <h2>Schedule New Task</h2>
-                    <label for="taskType">Task Type:</label>
-                    <select id="taskType" name="taskType">
-                        <option value='SF'>Social Friend</option>
-                        <option value='SR'>Social Relationship</option>
-                        <option value='SA'>Social Family</option>
-                        <option value='Tr'>Travel</option>
-                        <option value='St'>Study</option>
-                        <option value='Wk'>Work</option>
-                        <option value='Er'>Errand</option>
-                        <option value='Rd'>Read</option>
-                        <option value='Hb'>Hobby</option>
-                    </select>
-                    <label for="start_hour">
-                        <strong>Start Hour</strong>
-                    </label>
-                    <input type="text" id="start_hour" name="start_time" required>
-                    <label for="end_hour">
-                        <strong>End Hour</strong>
-                    </label>
-                    <input type="text" id="end_hour" name="end_time" required>
+                    <div>
+                        <label for="taskType">Task Type:</label>
+                        <select id="taskType" name="taskType" onChange="changeForm()">
+                            <option value='SF'>Social Friend</option>
+                            <option value='SR'>Social Relationship</option>
+                            <option value='SA'>Social Family</option>
+                            <option value='Tr'>Travel</option>
+                            <option value='St'>Study</option>
+                            <option value='Wk'>Work</option>
+                            <option value='Er'>Errand</option>
+                            <option value='Rd'>Read</option>
+                            <option value='Hb'>Hobby</option>
+                        </select>
+                        <label for="curTasks">Current Tasks:</label>
+                        <select id="curTasks" name="curTasks">
+                        </select>
+                        <label for="start_hour">
+                            <strong>Start Hour</strong>
+                        </label>
+                        <input type="text" id="start_hour" name="start_time" required>
+                        <label for="end_hour">
+                            <strong>End Hour</strong>
+                        </label>
+                        <input type="text" id="end_hour" name="end_time" required>
+                    </div>
                     <button type="submit" class="btn">Schedule</button>
                     <button type="button" class="btn cancel" onclick="closeScheduleForm()">Close</button>
                 </form>
             </div>
         </div>
         
-    
-=======
->>>>>>> c4ca4ffa6f9a822af129bf9e2c4fd84fa8dde61f
-        <canvas id="myCanvas" height="750" style="border:1px solid #c3c3c3;" onClick="showDay(event)">
-            Your browser does not support the canvas element.
-        </canvas>
+        <div>
+            <canvas id="myCanvas" height="750" class="calendar" onClick="showDay(event)">
+                Your browser does not support the canvas element.
+            </canvas>
+        </div>
+        
         <p id="demo"></p>
         <p id="temp"></p>
     </body>

@@ -46,6 +46,7 @@ def CalendarView(request, year, month, day):
     
 class TodoView(generic.ListView):
     template_name = 'calendarauto/todolist.html'
+    context_object_name = 'task_list'
     
 def MysteryView(request):
     return render(request, 'calendarauto/calendar.html')

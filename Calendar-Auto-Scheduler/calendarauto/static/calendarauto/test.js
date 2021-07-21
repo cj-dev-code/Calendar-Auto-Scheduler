@@ -3,6 +3,70 @@ function showCoords(event) {
     var y = event.clientY;
     var coords = "X coords: " + x + ", Y coords: " + y;
     document.getElementById("demo").innerHTML = coords;
+    // If less than 50 go to the task list
+    /*if (x < 50) {
+        var str = window.location.href;
+        const myArr = str.split("/");
+        
+        
+        // Gets the url for the new page, currently hardcoded, could be improved
+        var new_url = "";
+        for (let i = 0; i < 4; i++) {
+            new_url += myArr[i] + "/";
+        }
+        
+        window.location.replace(new_url + 'Todo/');
+    }
+    var canvas = document.getElementById("myCanvas");
+    // For the mystery view
+    if (x > canvas.width) {
+        var str = window.location.href;
+        const myArr = str.split("/");
+        
+        
+        // Gets the url for the new page, currently hardcoded, could be improved
+        var new_url = "";
+        for (let i = 0; i < 4; i++) {
+            new_url += myArr[i] + "/";
+        }
+        
+        window.location.replace(new_url + 'Todo/');
+    }*/
+}
+
+function getFrontUrl(date, next_week) {
+    // window.location.href is a function to determine what the url of the current page is
+    // it returns a string that contains the full url of the current page
+    // Use whenever you want to get the url of the page
+    var str = window.location.href;
+    // split function to seperate the string with the character specified
+    // returns an array of the string seperated when that character appears
+    // Use whenever you want a string to be seperated be a certain character
+    const myArr = str.split("/");
+    
+    // Gets the url for the new page, currently hardcoded, could be improved
+    var new_url = "";
+    for (let i = 0; i < 4; i++) {
+        new_url += myArr[i] + "/";
+    }
+    
+    if (date) {
+        var day = myArr[6];
+        var month = myArr[5];
+        var year = myArr[4];
+        
+        var new_date = new Date(year, month - 1, day);
+        if (next_week) {
+            new_date.setDate(new_date.getDate() + 7);
+        }
+        else {
+            // getDay() gets the day of the week (0-6)
+            new_date.setDate(new_date.getDate() - 7);
+        }   
+        new_url += new_date.getFullYear() + "/" + (new_date.getMonth() + 1) + "/" + new_date.getDate() + "/";
+    }
+   
+    return new_url;
 }
 
 function openForm() {
@@ -21,42 +85,23 @@ function closeScheduleForm() {
     document.getElementById("schedulepopupForm").style.display = "none";
 }
 
+function changeForm() {
+    console.log(document.getElementById("taskType").value);
+}
+
 function showDay(event) {
     var canvas = document.getElementById("myCanvas");
     var rect = canvas.getBoundingClientRect();
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
     
-    openScheduleForm();
     
-    
+
     if ((y < 30) && (x < Math.floor(canvas.width/9))) {
-        // window.location.href is a function to determine what the url of the current page is
-        // it returns a string that contains the full url of the current page
-        // Use whenever you want to get the url of the page
-        var str = window.location.href;
-        // split function to seperate the string with the character specified
-        // returns an array of the string seperated when that character appears
-        // Use whenever you want a string to be seperated be a certain character
-        const myArr = str.split("/");
-        var day = myArr[6];
-        var month = myArr[5];
-        var year = myArr[4];
-        
-        var new_date = new Date(year, month - 1, day);
-        // getDay() gets the day of the week (0-6)
-        new_date.setDate(new_date.getDate() - 7);
-        
-        // Gets the url for the new page, currently hardcoded, could be improved
-        var new_url = "";
-        for (let i = 0; i < 4; i++) {
-            new_url += myArr[i] + "/";
-        }
-        
-        window.location.replace(new_url + new_date.getFullYear() + "/" + (new_date.getMonth() + 1) + "/" + new_date.getDate() + "/");  
+        window.location.replace(getFrontUrl(true, false));  
     }
     else if ((y < 30) && (x > canvas.width - Math.floor(canvas.width/9))) {
-        // window.location.href is a function to determine what the url of the current page is
+        /*// window.location.href is a function to determine what the url of the current page is
         // it returns a string that contains the full url of the current page
         // Use whenever you want to get the url of the page
         var str = window.location.href;
@@ -70,7 +115,7 @@ function showDay(event) {
         var year = myArr[4];
         
         var new_date = new Date(year, month - 1, day);
-        new_date.setDate(new_date.getDate() + 7);
+        
         
         // Gets the url for the new page, currently hardcoded, could be improved
         var new_url = "";
@@ -78,7 +123,8 @@ function showDay(event) {
             new_url += myArr[i] + "/";
         }
         
-        window.location.replace(new_url + new_date.getFullYear() + "/" + (new_date.getMonth() + 1) + "/" + new_date.getDate() + "/");  
+        window.location.replace(new_url + new_date.getFullYear() + "/" + (new_date.getMonth() + 1) + "/" + new_date.getDate() + "/");  */
+        window.location.replace(getFrontUrl(true, true));  
     }
     switch (Math.floor(y / 30)) {
         case 1:
@@ -184,6 +230,8 @@ function showDay(event) {
         default:
             break;
     }
+    if ((y > 30) && (x > Math.floor(canvas.width/9)))
+        openScheduleForm();
 }
 
 
@@ -191,13 +239,15 @@ function showDay(event) {
 // Wait for page to load
 // Contains the eventListener for most elements
 document.addEventListener('DOMContentLoaded', function() {
+    var e = document.getElementById("scheForm");
+    //console.log(e.children);
+    
     // Creates the horizontal lines in the canvas
     var canvas = document.getElementById("myCanvas");
     
-    
-    
-    canvas.width = window.screen.width - 30;
+    canvas.width = window.screen.width - 130;
     var ctx = canvas.getContext("2d");
+
     var num_days = 7;
     for (let i = 0; i < num_days + 3; i++) {
         ctx.beginPath();
