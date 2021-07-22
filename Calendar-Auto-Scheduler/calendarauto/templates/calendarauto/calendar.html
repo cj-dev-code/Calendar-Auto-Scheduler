@@ -26,6 +26,7 @@
                 <form action="{% url 'calendarauto:add_new_task' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" method=post class="addFormContainer"> 
                     {% csrf_token %}
                     <h2>Create New Task</h2>
+
                     <label for="task_name">
                         <strong>Task Name</strong>
                     </label>
