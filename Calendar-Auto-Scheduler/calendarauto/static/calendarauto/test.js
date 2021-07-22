@@ -4,7 +4,7 @@ function showCoords(event) {
     var coords = "X coords: " + x + ", Y coords: " + y;
     document.getElementById("demo").innerHTML = coords;
     // If less than 50 go to the task list
-    /*if (x < 50) {
+    if (x < 50) {
         var str = window.location.href;
         const myArr = str.split("/");
         
@@ -31,7 +31,7 @@ function showCoords(event) {
         }
         
         window.location.replace(new_url + 'Todo/');
-    }*/
+    }
 }
 
 function getFrontUrl(date, next_week) {
@@ -137,8 +137,19 @@ function changeForm() {
             document.getElementById("specForm").appendChild(travel_start_input);
             break;
         case 'St':
+            var study_autofill_checkbox = document.createElement("input");
+            study_autofill_checkbox.type = "checkbox";
+            study_autofill_checkbox.innerHTML = "<strong>Autofill:</strong>";
+            document.getElementById("specForm").appendChild(study_autofill_checkbox);
             break;
         case 'Wk':
+            var travel_dest_label = document.createElement("label");
+            travel_dest_label.for = "travel_dest";
+            travel_dest_label.innerHTML = "<strong>Destination:</strong>";
+            document.getElementById("specForm").appendChild(travel_dest_label);
+            var travel_dest_input = document.createElement("input");
+            travel_dest_input.type = "text";
+            document.getElementById("specForm").appendChild(travel_dest_input);
             break;
         case 'Er':
             break;
