@@ -20,6 +20,6 @@ app_name = 'calendarauto'
 urlpatterns = [
     path('', views.CalendarView, name='temp_view'),
     path('<int:year>/<int:month>/<int:day>/', views.CalendarView, name='calendar_view'),
-    path('Todo', views.TodoView, name='todo'),
+    path('Todo', views.TodoView.as_view(), name='todo'),
     path('<int:year>/<int:month>/<int:day>/results', views.add_new_task, name='add_new_task'),
 ]

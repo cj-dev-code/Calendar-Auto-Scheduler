@@ -4,7 +4,7 @@ function showCoords(event) {
     var coords = "X coords: " + x + ", Y coords: " + y;
     document.getElementById("demo").innerHTML = coords;
     // If less than 50 go to the task list
-    /*if (x < 50) {
+    if (x < 50) {
         var str = window.location.href;
         const myArr = str.split("/");
         
@@ -31,7 +31,7 @@ function showCoords(event) {
         }
         
         window.location.replace(new_url + 'Todo/');
-    }*/
+    }
 }
 
 function getFrontUrl(date, next_week) {
