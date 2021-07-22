@@ -81,6 +81,25 @@
                             <strong>End Hour</strong>
                         </label>
                         <input type="text" id="end_hour" name="end_time" required>
+                        <label for="duration">
+                            <strong>Duration</strong>
+                        </label>
+                        <input type="text" id="duration" name="duration" required>
+                    </div>
+                    <div id="specForm">
+                        <label for="friends">
+                            <strong>Friend List:</strong>
+                        </label>
+                        <select id="friends" name="friends">
+                        </select>
+                        <label for="friend_desc">
+                            <strong>Description:</strong>
+                        </label>
+                        <input type="text" id="friend_desc" name="friend_desc" required>
+                        <label for="friend_loc">
+                            <strong>Location:</strong>
+                        </label>
+                        <input type="text" id="friend_loc" name="friend_desc" required>
                     </div>
                     <button type="submit" class="btn">Schedule</button>
                     <button type="button" class="btn cancel" onclick="closeScheduleForm()">Close</button>

@@ -1,7 +1,7 @@
-{% if question_list %}
+{% if task_list %}
     <ul> 
-    {% for question in question_list %}
-        <li>{{ question.question_text }}</li>
+    {% for task in task_list %}
+        <li>{{ task.task_name }}</li>
     {% endfor %}
     </ul>
 {% else %}

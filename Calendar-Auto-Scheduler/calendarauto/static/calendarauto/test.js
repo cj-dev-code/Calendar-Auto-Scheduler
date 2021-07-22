@@ -86,7 +86,72 @@ function closeScheduleForm() {
 }
 
 function changeForm() {
-    console.log(document.getElementById("taskType").value);
+    document.getElementById("specForm").innerHTML = '';
+    var sel = document.getElementById('taskType');
+    var opt = sel.options[sel.selectedIndex];
+ 
+    switch (opt.value) {
+        case 'SF':
+            var friend_list_label = document.createElement("label");
+            friend_list_label.for = "friends";
+            friend_list_label.innerHTML = "<strong>Friend List:</strong>";
+            document.getElementById("specForm").appendChild(friend_list_label);
+            var friend_select = document.createElement("select");
+            document.getElementById("specForm").appendChild(friend_select);
+            
+            var friend_desc_label = document.createElement("label");
+            friend_desc_label.for = "friend_desc";
+            friend_desc_label.innerHTML = "<strong>Description:</strong>";
+            document.getElementById("specForm").appendChild(friend_desc_label);
+            var friend_desc_input = document.createElement("input");
+            friend_desc_input.type = "text";
+            document.getElementById("specForm").appendChild(friend_desc_input);
+            
+            var friend_loc_label = document.createElement("label");
+            friend_loc_label.for = "friend_loc";
+            friend_loc_label.innerHTML = "<strong>Location:</strong>";
+            document.getElementById("specForm").appendChild(friend_loc_label);
+            var friend_loc_input = document.createElement("input");
+            friend_loc_input.type = "text";
+            document.getElementById("specForm").appendChild(friend_loc_input);
+            break;
+        case 'SR':
+            break;
+        case 'SA':
+            break;
+        case 'Tr':
+            var travel_dest_label = document.createElement("label");
+            travel_dest_label.for = "travel_dest";
+            travel_dest_label.innerHTML = "<strong>Destination:</strong>";
+            document.getElementById("specForm").appendChild(travel_dest_label);
+            var travel_dest_input = document.createElement("input");
+            travel_dest_input.type = "text";
+            document.getElementById("specForm").appendChild(travel_dest_input);
+            
+            var travel_start_label = document.createElement("label");
+            travel_start_label.for = "travel_start";
+            travel_start_label.innerHTML = "<strong>Start:</strong>";
+            document.getElementById("specForm").appendChild(travel_start_label);
+            var travel_start_input = document.createElement("input");
+            travel_start_input.type = "text";
+            document.getElementById("specForm").appendChild(travel_start_input);
+            break;
+        case 'St':
+            break;
+        case 'Wk':
+            break;
+        case 'Er':
+            break;
+        case 'Rd':
+            break;
+        case 'Hb':
+            break;
+        default:
+            break;
+    }
+    //var input = document.createElement("input");
+    //input.type = "text";
+    //document.getElementById("specForm").appendChild(input);
 }
 
 function showDay(event) {
@@ -130,7 +195,7 @@ function showDay(event) {
         case 1:
             document.getElementById("temp").innerHTML = "1am";
             document.getElementById("start_hour").value = "1am";
-            console.log("HIT");
+            
             break;
         case 2:
             document.getElementById("temp").innerHTML = "2am";
