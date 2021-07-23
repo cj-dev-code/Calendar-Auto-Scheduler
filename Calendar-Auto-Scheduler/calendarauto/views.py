@@ -16,10 +16,10 @@ from .models import GenericTask, GenericHourBlock
 def CalendarView(request, year, month, day):
     isValidDate = True
     try:
-        datetime(year, month, day)
+        datetime.datetime(year, month, day)
     except:
         isValidDate = False
-            
+        
     if (isValidDate):
         today = datetime.datetime(year, month, day)
     else:

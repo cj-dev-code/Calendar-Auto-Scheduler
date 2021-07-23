@@ -3,8 +3,9 @@ function showCoords(event) {
     var y = event.clientY;
     var coords = "X coords: " + x + ", Y coords: " + y;
     document.getElementById("demo").innerHTML = coords;
+    // Fix this, borken when clicking in the popup window
     // If less than 50 go to the task list
-    if (x < 50) {
+    /*if (x < 50) {
         var str = window.location.href;
         const myArr = str.split("/");
         
@@ -15,7 +16,7 @@ function showCoords(event) {
             new_url += myArr[i] + "/";
         }
         
-        window.location.replace(new_url + 'Todo/');
+        window.location.replace(new_url + 'Todo');
     }
     var canvas = document.getElementById("myCanvas");
     // For the mystery view
@@ -30,8 +31,8 @@ function showCoords(event) {
             new_url += myArr[i] + "/";
         }
         
-        window.location.replace(new_url + 'Todo/');
-    }
+        window.location.replace(new_url + 'Todo');
+    }*/
 }
 
 function getFrontUrl(date, next_week) {
@@ -137,25 +138,56 @@ function changeForm() {
             document.getElementById("specForm").appendChild(travel_start_input);
             break;
         case 'St':
-            var study_autofill_checkbox = document.createElement("input");
-            study_autofill_checkbox.type = "checkbox";
-            study_autofill_checkbox.innerHTML = "<strong>Autofill:</strong>";
-            document.getElementById("specForm").appendChild(study_autofill_checkbox);
+            var study_quizzes_checkbox = document.createElement("input");
+            study_quizzes_checkbox.type = "checkbox";
+            study_quizzes_checkbox.id = "study_quizzes";
+            document.getElementById("specForm").appendChild(study_quizzes_checkbox);
+            var study_quizzes_label = document.createElement("label");
+            study_quizzes_label.setAttribute("for", "study_quizzes");
+            study_quizzes_label.innerHTML = "<strong>Quizzes</strong>";
+            document.getElementById("specForm").appendChild(study_quizzes_label);
             break;
         case 'Wk':
-            var travel_dest_label = document.createElement("label");
-            travel_dest_label.for = "travel_dest";
-            travel_dest_label.innerHTML = "<strong>Destination:</strong>";
-            document.getElementById("specForm").appendChild(travel_dest_label);
-            var travel_dest_input = document.createElement("input");
-            travel_dest_input.type = "text";
-            document.getElementById("specForm").appendChild(travel_dest_input);
             break;
         case 'Er':
+            var errand_route_checkbox = document.createElement("input");
+            errand_route_checkbox.type = "checkbox";
+            errand_route_checkbox.id = "errand_route";
+            document.getElementById("specForm").appendChild(errand_route_checkbox);
+            var errand_route_label = document.createElement("label");
+            errand_route_label.setAttribute("for", "errand_route");
+            errand_route_label.innerHTML = "<strong>Plan Route</strong>";
+            document.getElementById("specForm").appendChild(errand_route_label);
             break;
         case 'Rd':
             break;
         case 'Hb':
+            var hobby_grow_checkbox = document.createElement("input");
+            hobby_grow_checkbox.type = "checkbox";
+            hobby_grow_checkbox.id = "hobby_grow";
+            document.getElementById("specForm").appendChild(hobby_grow_checkbox);
+            var hobby_grow_label = document.createElement("label");
+            hobby_grow_label.setAttribute("for", "hobby_grow");
+            hobby_grow_label.innerHTML = "<strong>Grow</strong>";
+            document.getElementById("specForm").appendChild(hobby_grow_label);
+            
+            var hobby_enjoy_checkbox = document.createElement("input");
+            hobby_enjoy_checkbox.type = "checkbox";
+            hobby_enjoy_checkbox.id = "hobby_enjoy";
+            document.getElementById("specForm").appendChild(hobby_enjoy_checkbox);
+            var hobby_enjoy_label = document.createElement("label");
+            hobby_enjoy_label.setAttribute("for", "hobby_enjoy");
+            hobby_enjoy_label.innerHTML = "<strong>Enjoy</strong>";
+            document.getElementById("specForm").appendChild(hobby_enjoy_label);
+            
+            var hobby_review_checkbox = document.createElement("input");
+            hobby_review_checkbox.type = "checkbox";
+            hobby_review_checkbox.id = "hobby_review";
+            document.getElementById("specForm").appendChild(hobby_review_checkbox);
+            var hobby_review_label = document.createElement("label");
+            hobby_review_label.setAttribute("for", "hobby_review");
+            hobby_review_label.innerHTML = "<strong>Review</strong>";
+            document.getElementById("specForm").appendChild(hobby_review_label);
             break;
         default:
             break;
@@ -204,78 +236,100 @@ function showDay(event) {
     }
     switch (Math.floor(y / 30)) {
         case 1:
-            document.getElementById("temp").innerHTML = "1am";
             document.getElementById("start_hour").value = "1am";
-            
+            document.getElementById("end_hour").value = "2am";
             break;
         case 2:
-            document.getElementById("temp").innerHTML = "2am";
+            document.getElementById("start_hour").value = "2am";
+            document.getElementById("end_hour").value = "3am";
             break;
         case 3:
-            document.getElementById("temp").innerHTML = "3am";
+            document.getElementById("start_hour").value = "3am";
+            document.getElementById("end_hour").value = "4am";
             break;
         case 4:
-            document.getElementById("temp").innerHTML = "4am";
+            document.getElementById("start_hour").value = "4am";
+            document.getElementById("end_hour").value = "5am";
             break;
         case 5:
-            document.getElementById("temp").innerHTML = "5am";
+            document.getElementById("start_hour").value = "5am";
+            document.getElementById("end_hour").value = "6am";
             break;
         case 6:
-            document.getElementById("temp").innerHTML = "6am";
+            document.getElementById("start_hour").value = "6am";
+            document.getElementById("end_hour").value = "7am";
             break;
         case 7:
-            document.getElementById("temp").innerHTML = "7am";
+            document.getElementById("start_hour").value = "7am";
+            document.getElementById("end_hour").value = "8am";
             break;
         case 8:
-            document.getElementById("temp").innerHTML = "8am";
+            document.getElementById("start_hour").value = "8am";
+            document.getElementById("end_hour").value = "9am";
             break;
         case 9:
-            document.getElementById("temp").innerHTML = "9am";
+            document.getElementById("start_hour").value = "9am";
+            document.getElementById("end_hour").value = "10am";
             break;
         case 10:
-            document.getElementById("temp").innerHTML = "10am";
+            document.getElementById("start_hour").value = "10am";
+            document.getElementById("end_hour").value = "11am";
             break;
         case 11:
-            document.getElementById("temp").innerHTML = "11am";
+            document.getElementById("start_hour").value = "11am";
+            document.getElementById("end_hour").value = "12pm";
             break;
         case 12:
-            document.getElementById("temp").innerHTML = "12pm";
+            document.getElementById("start_hour").value = "12pm";
+            document.getElementById("end_hour").value = "1pm";
             break;
         case 13:
-            document.getElementById("temp").innerHTML = "1pm";
+            document.getElementById("start_hour").value = "1pm";
+            document.getElementById("end_hour").value = "2pm";
             break;
         case 14:
-            document.getElementById("temp").innerHTML = "2pm";
+            document.getElementById("start_hour").value = "2pm";
+            document.getElementById("end_hour").value = "3pm";
             break;
         case 15:
-            document.getElementById("temp").innerHTML = "3pm";
+            document.getElementById("start_hour").value = "3pm";
+            document.getElementById("end_hour").value = "4pm";
             break;
         case 16:
-            document.getElementById("temp").innerHTML = "4pm";
+            document.getElementById("start_hour").value = "4pm";
+            document.getElementById("end_hour").value = "5pm";
             break;
         case 17:
-            document.getElementById("temp").innerHTML = "5pm";
+            document.getElementById("start_hour").value = "5pm";
+            document.getElementById("end_hour").value = "6pm";
             break;
         case 18:
-            document.getElementById("temp").innerHTML = "6pm";
+            document.getElementById("start_hour").value = "6pm";
+            document.getElementById("end_hour").value = "7pm";
             break;
         case 19:
-            document.getElementById("temp").innerHTML = "7pm";
+            document.getElementById("start_hour").value = "7pm";
+            document.getElementById("end_hour").value = "8pm";
             break;
         case 20:
-            document.getElementById("temp").innerHTML = "8pm";
+            document.getElementById("start_hour").value = "8pm";
+            document.getElementById("end_hour").value = "9pm";
             break;
         case 21:
-            document.getElementById("temp").innerHTML = "9pm";
+            document.getElementById("start_hour").value = "9pm";
+            document.getElementById("end_hour").value = "10pm";
             break;
         case 22:
-            document.getElementById("temp").innerHTML = "10pm";
+            document.getElementById("start_hour").value = "9pm";
+            document.getElementById("end_hour").value = "10pm";
             break;
         case 23:
-            document.getElementById("temp").innerHTML = "11pm";
+            document.getElementById("start_hour").value = "10pm";
+            document.getElementById("end_hour").value = "11pm";
             break;
         case 24:
-            document.getElementById("temp").innerHTML = "12am";
+            document.getElementById("start_hour").value = "11pm";
+            document.getElementById("end_hour").value = "12am";
             break;
         default:
             break;
@@ -283,7 +337,6 @@ function showDay(event) {
     switch (Math.floor(x / (canvas.width/9))) {
         case 1:
             document.getElementById("temp").innerHTML += "Sunday";
-            document.getElementById("end_hour").value = "2am";
             break;
         case 2:
             document.getElementById("temp").innerHTML += "Monday";

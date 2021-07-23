@@ -49,6 +49,8 @@
     max-width: 500px;
     padding: 20px;
     background-color: #fff;
+    /*max-height: 600px;
+    */
 }
 .addFormContainer input[type=text],
 .addFormContainer input[type=datetime-local],
@@ -58,6 +60,7 @@
     margin: 5px 0 20px 0;
     border: none;
     background: #eee;
+    height: 25px;
 }
 .addFormContainer input[type=text]:focus,
 .addFormContainer input[type=datetime-local]:focus,
@@ -98,6 +101,7 @@
     margin: 5px 1 5px 1;
     border: none;
     background: #eee;
+    height: 25px;
 }
 
 /*.scheFormContainer input[type=text]:focus,

@@ -77,15 +77,23 @@
                         <label for="start_hour">
                             <strong>Start Hour</strong>
                         </label>
-                        <input type="text" id="start_hour" name="start_time" required>
+                        <input type="text" id="start_hour" name="start_time" disabled>
                         <label for="end_hour">
                             <strong>End Hour</strong>
                         </label>
-                        <input type="text" id="end_hour" name="end_time" required>
+                        <input type="text" id="end_hour" name="end_time" disabled>
                         <label for="duration">
                             <strong>Duration</strong>
                         </label>
-                        <input type="text" id="duration" name="duration" required>
+                        <input type="text" value="1hr" id="duration" name="duration" disabled>
+                        <input type="checkbox" id="autofill" name="autofill">
+                        <label for="autofill">
+                            <strong>Autofill</strong>
+                        </label>
+                        <input type="checkbox" id="email" name="email">
+                        <label for="email">
+                            <strong>Email Notification</strong>
+                        </label>
                     </div>
                     <div id="specForm">
                         <label for="friends">
