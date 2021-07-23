@@ -32,7 +32,6 @@ function showCoords(event) {
         }
         
         window.location.replace(new_url + 'Todo');
-<<<<<<< HEAD
     }*/
 }
 
@@ -335,26 +334,34 @@ function showDay(event) {
         default:
             break;
     }
+    var day_month;
     switch (Math.floor(x / (canvas.width/9))) {
         case 1:
+            day_month = 0;
             document.getElementById("temp").innerHTML += "Sunday";
             break;
         case 2:
+            day_month = 1;
             document.getElementById("temp").innerHTML += "Monday";
             break;
         case 3:
+            day_month = 2;
             document.getElementById("temp").innerHTML += "Tuesday";
             break;
         case 4:
+            day_month = 3;
             document.getElementById("temp").innerHTML += "Wednesday";
             break;
         case 5:
+            day_month = 4;
             document.getElementById("temp").innerHTML += "Thursday";
             break;
         case 6:
+            day_month = 5;
             document.getElementById("temp").innerHTML += "Friday";
             break;
         case 7:
+            day_month = 6;
             document.getElementById("temp").innerHTML += "Saturday";
             break;
         default:
@@ -362,6 +369,21 @@ function showDay(event) {
     }
     if ((y > 30) && (x > Math.floor(canvas.width/9)))
         openScheduleForm();
+        
+    // Gets the day of the month
+    var str = window.location.href;
+    
+    const myArr = str.split("/");
+    
+    var day = myArr[6];
+    var month = myArr[5];
+    var year = myArr[4];
+        
+    var new_date = new Date(year, month - 1, day);
+    
+    // getDay() gets the day of the week (0-6)
+    new_date.setDate(new_date.getDate() - (new_date.getDay() - day_month));
+    document.getElementById("day_month").value = new_date.getDate();
 }
 
 

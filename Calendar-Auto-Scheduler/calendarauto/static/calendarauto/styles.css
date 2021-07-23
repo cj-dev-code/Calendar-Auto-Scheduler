@@ -129,3 +129,9 @@
 .openButton:hover {
     opacity: 1;
 }
+
+.ghost {
+    /* Hides the element and also doesn't make it so
+    the shape of the other elements aren't chnaged */
+    display: none;
+}
