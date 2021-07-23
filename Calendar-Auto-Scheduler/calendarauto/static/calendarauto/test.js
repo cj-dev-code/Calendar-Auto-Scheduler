@@ -32,6 +32,7 @@ function showCoords(event) {
         }
         
         window.location.replace(new_url + 'Todo');
+<<<<<<< HEAD
     }*/
 }
 

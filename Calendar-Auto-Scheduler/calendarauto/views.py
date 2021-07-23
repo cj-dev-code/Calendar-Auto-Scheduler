@@ -74,10 +74,24 @@ def add_new_task(request,year, month, day):
     do_after = get_datetime_from_post(request.POST['start_time'])
     deadline = get_datetime_from_post(request.POST['end_time'])
     task_duration = float(request.POST['duration'])
-    create_generic_task(deadline, task_duration, do_after=do_after,
+    
+    # make sure the user didn't put an illegal time in.
+    if datetime.timedelta(hours=task_duration // 1, minutes=int((task_duration % 1)*60))+ do_after > deadline:
+        print('invalid.')
+        return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+    
+    
+    task = create_generic_task(deadline, task_duration, do_after=do_after,
                         task_name = request.POST['task_name'],
                         task_description=request.POST['task_desc'])
+    task.save()
+    print('attempted to save task')
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
 def schedule_hour_block(request, year, month, day, hour):
-    pass
+    # Find the hour block associated with this hour.
+        # if it doesn't exist, then make a new one.
+    
+    # Call the populate method on the hour block.
+    print(GenericHourBlock.get_hour(day, month, year, hour))
+    return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))

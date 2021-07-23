@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 # Create your models here.
 
 class GenericTask(models.Model):
@@ -18,8 +18,7 @@ class GenericTask(models.Model):
     # Do by and the deadline
     
     def __str__(self):
-        return self.task_name + self.task_description 
-    
+        return self.task_name + self.task_description + ". Due by " + str(self.deadline) + ". Start by " + str(self.do_after) + ". Duration: " + str(self.est_time_to_complete)
 
     def get_starting_deadline(self):
         return self.deadline - timedelta(hours = self.est_time_to_complete.hour)
@@ -34,6 +33,35 @@ class GenericHourBlock(models.Model):
     
     def __str__(self):
         return self.hour_type + str(self.get_current_task())
+    
+    def is_hour(self, day, month, year, hour_start):
+        return self.datetime.day == day and self.datetime.month == month and self.datetime.year == year and self.datetime.hour == hour_start
+    
+    # 
+    '''
+    Function to get the GenericHourBlock associated with this day, month, and year, and hour start.
+    Assumes:
+            0 < month < 13
+            0 < day < 32
+            0 <= hour < 23
+            1 <= year <= 9999
+    '''
+    def get_hour(day, month, year, hour_start):
+        
+        objects = GenericHourBlock.objects.order_by('-datetime')
+        # Binary search this list until you get to the Generic Hour Block.
+        target = datetime(hour=hour_start, month=month, year=year, day=day )
+        i = 0
+        j = len(objects)
+        while i < j:
+            mid = (i + j)//2
+            if mid.datetime < target:
+                i = mid
+            elif mid.datetime > target:
+                j = mid
+            else:
+                return objects[mid]
+        raise ValueError("The Current Hour" + str(month) + '/' + str(day) + '/' + str(year) + ' at ' + str(hour_start) + " is not in the system.")
     def populate(self):
         options = GenericTask.objects.all()
                                                     # if it starts before the block ends, it's an option!
