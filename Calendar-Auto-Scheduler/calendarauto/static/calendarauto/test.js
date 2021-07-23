@@ -15,7 +15,7 @@ function showCoords(event) {
             new_url += myArr[i] + "/";
         }
         
-        window.location.replace(new_url + 'Todo/');
+        window.location.replace(new_url + 'Todo');
     }
     var canvas = document.getElementById("myCanvas");
     // For the mystery view
@@ -30,7 +30,7 @@ function showCoords(event) {
             new_url += myArr[i] + "/";
         }
         
-        window.location.replace(new_url + 'Todo/');
+        window.location.replace(new_url + 'Todo');
     }
 }
 

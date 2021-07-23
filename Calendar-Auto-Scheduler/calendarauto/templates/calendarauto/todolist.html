@@ -1,7 +1,7 @@
 {% if task_list %}
     <ul> 
     {% for task in task_list %}
-        <li>{{ task.task_name }}</li>
+        <li>[{{ task.task_name }}] {{ task.task_description }}: To do by {{ task.deadline }} and after {{ task.deadline }} . Will take {{ task.est_time_to_complete }} hours</li>
     {% endfor %}
     </ul>
 {% else %}
