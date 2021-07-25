@@ -22,4 +22,5 @@ urlpatterns = [
     path('<int:year>/<int:month>/<int:day>/', views.CalendarView, name='calendar_view'),
     path('Todo', views.TodoView.as_view(), name='todo'),
     path('<int:year>/<int:month>/<int:day>/results', views.add_new_task, name='add_new_task'),
+    path('<int:year>/<int:month>/<int:day>/scheduld', views.add_new_task, name='schedule_hour_block'),
 ]
