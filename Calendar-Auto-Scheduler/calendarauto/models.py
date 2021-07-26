@@ -29,7 +29,7 @@ class GenericHourBlock(models.Model):
     hour_type = models.CharField(max_length=2, default='BL') # The type of the hour
     datetime = models.DateTimeField('Hour Representative')
     isFilled = models.BooleanField(default=False)
-    current_task = models.ForeignKey(GenericTask, on_delete=models.CASCADE)
+    current_task = models.ForeignKey(GenericTask, on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self):
         return self.hour_type + str(self.get_current_task())
@@ -61,7 +61,7 @@ class GenericHourBlock(models.Model):
                 j = mid
             else:
                 return objects[mid]
-        raise ValueError("The Current Hour" + str(month) + '/' + str(day) + '/' + str(year) + ' at ' + str(hour_start) + " is not in the system.")
+        return None
     def populate(self):
         options = GenericTask.objects.all()
                                                     # if it starts before the block ends, it's an option!
@@ -69,6 +69,7 @@ class GenericHourBlock(models.Model):
         refined_options = options.filter(id__in = selection)
         if len(refined_options):
             self.current_task = refined_options.earliest()
+        self.save()
     def get_current_task(self):
         if hasattr(self, 'current_task'):
             return self.current_task
