@@ -94,6 +94,7 @@ def schedule_hour_block(request, year, month, day):
     
     # Call the populate method on the hour block.
     # Format the start time from the front end into military time for our generic block
+    print(request.POST)
     start_time = request.POST['start_hour']
     if 'pm' in start_time:
         start_time = int(start_time[:-2]) + 12

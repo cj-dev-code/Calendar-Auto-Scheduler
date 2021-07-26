@@ -279,6 +279,7 @@ function showDay(event) {
                 hour_block = 1;
                 document.getElementById("start_hour").value = "1am";
                 document.getElementById("end_hour").value = "2am";
+                
                 break;
             case 2:
                 hour_block = 2;
@@ -445,6 +446,9 @@ function showDay(event) {
         // getDay() gets the day of the week (0-6)
         new_date.setDate(new_date.getDate() - (new_date.getDay() - day_month));
         document.getElementById("DAY").value = new_date.getDate();
+        
+        document.getElementById("start_time1").value = "1am";
+        document.getElementById("end_time1").value = "2am";
     }
 }
 
