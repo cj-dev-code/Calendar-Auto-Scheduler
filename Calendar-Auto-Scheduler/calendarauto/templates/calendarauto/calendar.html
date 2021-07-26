@@ -57,6 +57,7 @@
         <div class="schedulePopup">
             <div class="formPopup" id="schedulepopupForm">
                 <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="scheFormContainer">
+                    {% csrf_token %}
                     <h2>Schedule New Task</h2>
                     <div>
                         <label for="taskType">Task Type:</label>

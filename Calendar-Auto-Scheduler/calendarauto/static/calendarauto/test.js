@@ -23,7 +23,7 @@ function showCoords(event) {
     }
     var canvas = document.getElementById("myCanvas");
     // For the mystery view
-    if (x > canvas.width) {
+    if (x > (canvas.width + 50)) {
         var str = window.location.href;
         const myArr = str.split("/");
         

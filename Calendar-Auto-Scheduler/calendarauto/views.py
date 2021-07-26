@@ -88,15 +88,16 @@ def add_new_task(request,year, month, day):
     print('attempted to save task')
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
-def schedule_hour_block(request, year, month): 
+def schedule_hour_block(request, year, month, day): 
     # Find the hour block associated with this hour.
         # if it doesn't exist, then make a new one.
     
     # Call the populate method on the hour block.
-    day = request['DAY']
+    day = int(request.POST['DAY'])
+    
     try:
         print(GenericHourBlock.get_hour(day, month, year, day))
     except:
-        newblock = GenericHourBlock(datetime=datetime.datetime(year=year, month=month, day=day, hour=day))
+        newblock = GenericHourBlock(datetime=datetime.datetime(year=year, month=month, day=day, hour=1))
         newblock.save()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
