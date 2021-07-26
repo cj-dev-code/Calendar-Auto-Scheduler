@@ -28,7 +28,8 @@ def CalendarView(request, year, month, day):
     idx = (today.weekday() + 1) % 7
     sun = today - datetime.timedelta(idx)
     sat = today + datetime.timedelta(6 - idx)
-    return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 'saturday' : sat, 'day' : day})
+    print(GenericTask.objects.order_by('deadline'))
+    return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 'saturday' : sat, 'task_list' : GenericTask.objects.order_by('deadline')})
     
 class TodoView(generic.ListView):
     template_name = 'calendarauto/todolist.html'
