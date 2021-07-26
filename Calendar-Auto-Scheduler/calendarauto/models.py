@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta, datetime
+from django.utils.timezone import make_aware
+
 # Create your models here.
 
 class GenericTask(models.Model):
@@ -50,15 +52,16 @@ class GenericHourBlock(models.Model):
         
         objects = GenericHourBlock.objects.order_by('-datetime')
         # Binary search this list until you get to the Generic Hour Block.
-        target = datetime(hour=hour_start, month=month, year=year, day=day )
+        target = make_aware(datetime(hour=hour_start, month=month, year=year, day=day ))
         i = 0
         j = len(objects)
         while i < j:
             mid = (i + j)//2
-            if mid.datetime < target:
-                i = mid
-            elif mid.datetime > target:
-                j = mid
+            print(objects[mid].datetime, target,objects[mid].datetime < target )
+            if objects[mid].datetime < target:
+                j = mid - 1
+            elif objects[mid].datetime > target:
+                i = mid + 1
             else:
                 return objects[mid]
         return None
@@ -70,9 +73,11 @@ class GenericHourBlock(models.Model):
         if len(refined_options):
             self.current_task = refined_options.earliest()
         self.save()
+        
     def get_current_task(self):
         if hasattr(self, 'current_task'):
             return self.current_task
         else:
             return None
+    
     
