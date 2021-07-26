@@ -96,11 +96,13 @@ def schedule_hour_block(request, year, month, day):
     # Call the populate method on the hour block.
     # Format the start time from the front end into military time for our generic block
     print(request.POST)
-    start_time = request.POST['start_hour']
+    start_time = request.POST['start_time1']
     if 'pm' in start_time:
-        start_time = int(start_time[:-2]) + 12
+        start_time = (int(start_time[:-2]) + 12) % 24
     elif 'am' in start_time:
         start_time = int(start_time[:-2])
+        if start_time == 12:
+            start_time =0
     else:
         start_time = int(start_time)
         
@@ -108,9 +110,12 @@ def schedule_hour_block(request, year, month, day):
     day = int(request.POST['DAY'])
     
     # And get the hour block associated with that hour (make one if it's not there)
-    newBlock = GenericHourBlock.get_hour(day, month, year, day)
-    if newBlock == None:
-        newblock = GenericHourBlock(datetime=datetime.datetime(year=year, month=month, day=day, hour=day))
+    newBlock = GenericHourBlock.get_hour(day, month, year, start_time)
+    print('First call',newBlock, type(newBlock), str(newBlock))
+    if type(newBlock) == type(None):
+        newblock = GenericHourBlock(datetime=datetime.datetime(year=year, month=month, day=day, hour=start_time))
+        print('second call', newBlock)
         newblock.save()
+        print('second call', newBlock)
     newBlock.populate()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
