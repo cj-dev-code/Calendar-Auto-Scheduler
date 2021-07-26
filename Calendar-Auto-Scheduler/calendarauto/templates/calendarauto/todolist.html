@@ -1,9 +1,33 @@
-{% if task_list %}
-    <ul> 
-    {% for task in task_list %}
-        <li>[{{ task.task_name }}] {{ task.task_description }}: To do by {{ task.deadline }} and after {{ task.deadline }} . Will take {{ task.est_time_to_complete }} hours</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No tasks.</p>
-{% endif %}
+<!DOCTYPE html>
+
+<html onClick="changeURL(event)">
+    <!-- Does load it is the name in the tab -->
+    <head>
+        <meta charset="utf-8">
+        <!-- 
+        <title>My test page</title>
+        -->
+        
+    </head>
+    <body>
+    {% if task_list %}
+        <ul> 
+        {% for task in task_list %}
+            <li>[{{ task.task_name }}] {{ task.task_description }}: To do by {{ task.deadline }} and after {{ task.deadline }} . Will take {{ task.est_time_to_complete }} hours</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks.</p>
+    {% endif %}
+    </body>
+</html>
+<script>
+    function changeURL(event) {
+        var x = event.clientX;
+        var y = event.clientY;
+        if (x > screen.width - 50) {
+            var today = new Date();
+            window.location.replace("http://127.0.0.1:8000/calendarauto/" + today.getFullYear() + "/" + (today.getMonth() + 1) + "/" + today.getDate() + "/");
+        }
+    }
+</script>

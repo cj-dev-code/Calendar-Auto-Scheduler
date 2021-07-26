@@ -5,7 +5,7 @@
     <!-- Does load it is the name in the tab -->
     <head>
         <meta charset="utf-8">
-        <title>My test page</title>
+        <title>Auto Calendar</title>
         <link rel="stylesheet" type="text/css" href="{% static 'calendarauto/styles.css' %}">
         <script type="text/javascript" src="{% static 'calendarauto/test.js' %}"></script>
     </head>
@@ -56,7 +56,7 @@
         
         <div class="schedulePopup">
             <div class="formPopup" id="schedulepopupForm">
-                <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" class="scheFormContainer">
+                <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="scheFormContainer">
                     <h2>Schedule New Task</h2>
                     <div>
                         <label for="taskType">Task Type:</label>
@@ -105,11 +105,11 @@
                         <label for="friend_desc">
                             <strong>Description:</strong>
                         </label>
-                        <input type="text" id="friend_desc" name="friend_desc" required>
+                        <input type="text" id="friend_desc" name="friend_desc">
                         <label for="friend_loc">
                             <strong>Location:</strong>
                         </label>
-                        <input type="text" id="friend_loc" name="friend_desc" required>
+                        <input type="text" id="friend_loc" name="friend_desc">
                     </div>
                     <button type="submit" class="btn">Schedule</button>
                     <button type="button" class="btn cancel" onclick="closeScheduleForm()">Close</button>
@@ -131,4 +131,9 @@
         <p id="demo"></p>
         <p id="temp"></p>
     </body>
+<!-- Can later call in javascript -->
+{{ sunday|json_script:'day' }}
 </html>
+<script>
+    val = "{{ sunday }}";
+</script>

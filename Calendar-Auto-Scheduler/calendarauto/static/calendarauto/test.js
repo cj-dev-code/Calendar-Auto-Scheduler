@@ -2,10 +2,13 @@ function showCoords(event) {
     var x = event.clientX;
     var y = event.clientY;
     var coords = "X coords: " + x + ", Y coords: " + y;
+
     document.getElementById("demo").innerHTML = coords;
     // Fix this, borken when clicking in the popup window
     // If less than 50 go to the task list
-    /*if (x < 50) {
+    if (event.button == -1)
+        return;
+    else if (x < 50) {
         var str = window.location.href;
         const myArr = str.split("/");
         
@@ -32,7 +35,7 @@ function showCoords(event) {
         }
         
         window.location.replace(new_url + 'Todo');
-    }*/
+    }
 }
 
 function getFrontUrl(date, next_week) {
@@ -197,231 +200,252 @@ function changeForm() {
     //document.getElementById("specForm").appendChild(input);
 }
 
-function showDay(event) {
-    var canvas = document.getElementById("myCanvas");
-    var rect = canvas.getBoundingClientRect();
-    var x = event.clientX - rect.left;
-    var y = event.clientY - rect.top;
-    
-    
+function rgbToHex(r, g, b) {
+    if (r > 255 || g > 255 || b > 255)
+        throw "Invalid color component";
+    return ((r << 16) | (g << 8) | b).toString(16);
+}
 
-    if ((y < 30) && (x < Math.floor(canvas.width/9))) {
-        window.location.replace(getFrontUrl(true, false));  
+
+/**
+ * Return the location of the element (x,y) being relative to the document.
+ * 
+ * @param {Element} obj Element to be located
+ */
+function getElementPosition(obj) {
+    var curleft = 0, curtop = 0;
+    if (obj.offsetParent) {
+        do {
+            curleft += obj.offsetLeft;
+            curtop += obj.offsetTop;
+        } while (obj = obj.offsetParent);
+        return { x: curleft, y: curtop };
     }
-    else if ((y < 30) && (x > canvas.width - Math.floor(canvas.width/9))) {
-        /*// window.location.href is a function to determine what the url of the current page is
-        // it returns a string that contains the full url of the current page
-        // Use whenever you want to get the url of the page
-        var str = window.location.href;
-        // split function to seperate the string with the character specified
-        // returns an array of the string seperated when that character appears
-        // Use whenever you want a string to be seperated be a certain character
-        const myArr = str.split("/");
-        console.log(myArr);
-        var day = myArr[6];
-        var month = myArr[5];
-        var year = myArr[4];
-        
-        var new_date = new Date(year, month - 1, day);
-        
-        
-        // Gets the url for the new page, currently hardcoded, could be improved
-        var new_url = "";
-        for (let i = 0; i < 4; i++) {
-            new_url += myArr[i] + "/";
-        }
-        
-        window.location.replace(new_url + new_date.getFullYear() + "/" + (new_date.getMonth() + 1) + "/" + new_date.getDate() + "/");  */
-        window.location.replace(getFrontUrl(true, true));  
-    }
-    var hour_block;
-    switch (Math.floor(y / 30)) {
-        case 1:
-            hour_block = 1;
-            document.getElementById("start_hour").value = "1am";
-            document.getElementById("end_hour").value = "2am";
-            break;
-        case 2:
-            hour_block = 2;
-            document.getElementById("start_hour").value = "2am";
-            document.getElementById("end_hour").value = "3am";
-            break;
-        case 3:
-            hour_block = 3;
-            document.getElementById("start_hour").value = "3am";
-            document.getElementById("end_hour").value = "4am";
-            break;
-        case 4:
-            hour_block = 4;
-            document.getElementById("start_hour").value = "4am";
-            document.getElementById("end_hour").value = "5am";
-            break;
-        case 5:
-            hour_block = 5;
-            document.getElementById("start_hour").value = "5am";
-            document.getElementById("end_hour").value = "6am";
-            break;
-        case 6:
-            hour_block = 6;
-            document.getElementById("start_hour").value = "6am";
-            document.getElementById("end_hour").value = "7am";
-            break;
-        case 7:
-            hour_block = 7;
-            document.getElementById("start_hour").value = "7am";
-            document.getElementById("end_hour").value = "8am";
-            break;
-        case 8:
-            hour_block = 8;
-            document.getElementById("start_hour").value = "8am";
-            document.getElementById("end_hour").value = "9am";
-            break;
-        case 9:
-            hour_block = 9;
-            document.getElementById("start_hour").value = "9am";
-            document.getElementById("end_hour").value = "10am";
-            break;
-        case 10:
-            hour_block = 10;
-            document.getElementById("start_hour").value = "10am";
-            document.getElementById("end_hour").value = "11am";
-            break;
-        case 11:
-            hour_block = 11;
-            document.getElementById("start_hour").value = "11am";
-            document.getElementById("end_hour").value = "12pm";
-            break;
-        case 12:
-            hour_block = 12;
-            document.getElementById("start_hour").value = "12pm";
-            document.getElementById("end_hour").value = "1pm";
-            break;
-        case 13:
-            hour_block = 13;
-            document.getElementById("start_hour").value = "1pm";
-            document.getElementById("end_hour").value = "2pm";
-            break;
-        case 14:
-            hour_block = 14;
-            document.getElementById("start_hour").value = "2pm";
-            document.getElementById("end_hour").value = "3pm";
-            break;
-        case 15:
-            hour_block = 15;
-            document.getElementById("start_hour").value = "3pm";
-            document.getElementById("end_hour").value = "4pm";
-            break;
-        case 16:
-            hour_block = 16;
-            document.getElementById("start_hour").value = "4pm";
-            document.getElementById("end_hour").value = "5pm";
-            break;
-        case 17:
-            hour_block = 17;
-            document.getElementById("start_hour").value = "5pm";
-            document.getElementById("end_hour").value = "6pm";
-            break;
-        case 18:
-            hour_block = 18;
-            document.getElementById("start_hour").value = "6pm";
-            document.getElementById("end_hour").value = "7pm";
-            break;
-        case 19:
-            hour_block = 19;
-            document.getElementById("start_hour").value = "7pm";
-            document.getElementById("end_hour").value = "8pm";
-            break;
-        case 20:
-            hour_block = 20;
-            document.getElementById("start_hour").value = "8pm";
-            document.getElementById("end_hour").value = "9pm";
-            break;
-        case 21:
-            hour_block = 21;
-            document.getElementById("start_hour").value = "9pm";
-            document.getElementById("end_hour").value = "10pm";
-            break;
-        case 22:
-            hour_block = 22;
-            document.getElementById("start_hour").value = "9pm";
-            document.getElementById("end_hour").value = "10pm";
-            break;
-        case 23:
-            hour_block = 23;
-            document.getElementById("start_hour").value = "10pm";
-            document.getElementById("end_hour").value = "11pm";
-            break;
-        case 24:
-            hour_block = 24;
-            document.getElementById("start_hour").value = "11pm";
-            document.getElementById("end_hour").value = "12am";
-            break;
-        default:
-            break;
-    }
-    var day_month;
-    switch (Math.floor(x / (canvas.width/9))) {
-        case 1:
-            day_month = 0;
-            document.getElementById("temp").innerHTML += "Sunday";
-            break;
-        case 2:
-            day_month = 1;
-            document.getElementById("temp").innerHTML += "Monday";
-            break;
-        case 3:
-            day_month = 2;
-            document.getElementById("temp").innerHTML += "Tuesday";
-            break;
-        case 4:
-            day_month = 3;
-            document.getElementById("temp").innerHTML += "Wednesday";
-            break;
-        case 5:
-            day_month = 4;
-            document.getElementById("temp").innerHTML += "Thursday";
-            break;
-        case 6:
-            day_month = 5;
-            document.getElementById("temp").innerHTML += "Friday";
-            break;
-        case 7:
-            day_month = 6;
-            document.getElementById("temp").innerHTML += "Saturday";
-            break;
-        default:
-            break;
-    }
-    if ((y > 30) && (x > Math.floor(canvas.width/9)))
-        openScheduleForm();
-        
+    return undefined;
+}
+
+
+/** 
+ * return the location of the click (or another mouse event) relative to the given element (to increase accuracy).
+ * @param {DOM Object} element A dom element (button,canvas,input etc)
+ * @param {DOM Event} event An event generate by an event listener.
+ */
+function getEventLocation(element,event){
+    // Relies on the getElementPosition function.
+    var pos = getElementPosition(element);
+    
+    return {
+    	x: (event.pageX - pos.x),
+      	y: (event.pageY - pos.y)
+    };
+}
+
+
+function showDay(event) {
+    const classes = JSON.parse(document.getElementById('day').textContent);
+    var new_date = new Date(classes);
+    console.log(new_date);
+    
+    var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect((day_month + 1) * (canvas.width/9), hour_block * 30, (canvas.width/9), 30);
-        
-    // Gets the day of the month
-    var str = window.location.href;
-    
-    const myArr = str.split("/");
-    
-    var day = myArr[6];
-    var month = myArr[5];
-    var year = myArr[4];
-        
-    var new_date = new Date(year, month - 1, day);
-    
-    // getDay() gets the day of the week (0-6)
-    new_date.setDate(new_date.getDate() - (new_date.getDay() - day_month));
-    document.getElementById("day_month").value = new_date.getDate();
+    var eventLocation = getEventLocation(canvas, event);
 
     var pixelData = ctx.getImageData(eventLocation.x, eventLocation.y, 1, 1).data; 
 
     // If transparency on the pixel , array = [0,0,0,0]
-    if((pixelData[0] == 0) && (pixelData[1] == 0) && (pixelData[2] == 0) && (pixelData[3] == 0)){
+    //if((pixelData[0] == 0) && (pixelData[1] == 0) && (pixelData[2] == 0) && (pixelData[3] == 0)){
         // Do something if the pixel is transparent
-    }
+    //}
     
     var hex = "#" + ("000000" + rgbToHex(pixelData[0], pixelData[1], pixelData[2])).slice(-6);
+    if (hex === "#ff0000") {
+        
+        
+    }
+    else {
+        var rect = canvas.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+        
+        if ((y < 30) && (x < Math.floor(canvas.width/9))) {
+            window.location.replace(getFrontUrl(true, false));  
+        }
+        else if ((y < 30) && (x > canvas.width - Math.floor(canvas.width/9))) {
+            window.location.replace(getFrontUrl(true, true));  
+        }
+        var hour_block;
+        switch (Math.floor(y / 30)) {
+            case 1:
+                hour_block = 1;
+                document.getElementById("start_hour").value = "1am";
+                document.getElementById("end_hour").value = "2am";
+                break;
+            case 2:
+                hour_block = 2;
+                document.getElementById("start_hour").value = "2am";
+                document.getElementById("end_hour").value = "3am";
+                break;
+            case 3:
+                hour_block = 3;
+                document.getElementById("start_hour").value = "3am";
+                document.getElementById("end_hour").value = "4am";
+                break;
+            case 4:
+                hour_block = 4;
+                document.getElementById("start_hour").value = "4am";
+                document.getElementById("end_hour").value = "5am";
+                break;
+            case 5:
+                hour_block = 5;
+                document.getElementById("start_hour").value = "5am";
+                document.getElementById("end_hour").value = "6am";
+                break;
+            case 6:
+                hour_block = 6;
+                document.getElementById("start_hour").value = "6am";
+                document.getElementById("end_hour").value = "7am";
+                break;
+            case 7:
+                hour_block = 7;
+                document.getElementById("start_hour").value = "7am";
+                document.getElementById("end_hour").value = "8am";
+                break;
+            case 8:
+                hour_block = 8;
+                document.getElementById("start_hour").value = "8am";
+                document.getElementById("end_hour").value = "9am";
+                break;
+            case 9:
+                hour_block = 9;
+                document.getElementById("start_hour").value = "9am";
+                document.getElementById("end_hour").value = "10am";
+                break;
+            case 10:
+                hour_block = 10;
+                document.getElementById("start_hour").value = "10am";
+                document.getElementById("end_hour").value = "11am";
+                break;
+            case 11:
+                hour_block = 11;
+                document.getElementById("start_hour").value = "11am";
+                document.getElementById("end_hour").value = "12pm";
+                break;
+            case 12:
+                hour_block = 12;
+                document.getElementById("start_hour").value = "12pm";
+                document.getElementById("end_hour").value = "1pm";
+                break;
+            case 13:
+                hour_block = 13;
+                document.getElementById("start_hour").value = "1pm";
+                document.getElementById("end_hour").value = "2pm";
+                break;
+            case 14:
+                hour_block = 14;
+                document.getElementById("start_hour").value = "2pm";
+                document.getElementById("end_hour").value = "3pm";
+                break;
+            case 15:
+                hour_block = 15;
+                document.getElementById("start_hour").value = "3pm";
+                document.getElementById("end_hour").value = "4pm";
+                break;
+            case 16:
+                hour_block = 16;
+                document.getElementById("start_hour").value = "4pm";
+                document.getElementById("end_hour").value = "5pm";
+                break;
+            case 17:
+                hour_block = 17;
+                document.getElementById("start_hour").value = "5pm";
+                document.getElementById("end_hour").value = "6pm";
+                break;
+            case 18:
+                hour_block = 18;
+                document.getElementById("start_hour").value = "6pm";
+                document.getElementById("end_hour").value = "7pm";
+                break;
+            case 19:
+                hour_block = 19;
+                document.getElementById("start_hour").value = "7pm";
+                document.getElementById("end_hour").value = "8pm";
+                break;
+            case 20:
+                hour_block = 20;
+                document.getElementById("start_hour").value = "8pm";
+                document.getElementById("end_hour").value = "9pm";
+                break;
+            case 21:
+                hour_block = 21;
+                document.getElementById("start_hour").value = "9pm";
+                document.getElementById("end_hour").value = "10pm";
+                break;
+            case 22:
+                hour_block = 22;
+                document.getElementById("start_hour").value = "9pm";
+                document.getElementById("end_hour").value = "10pm";
+                break;
+            case 23:
+                hour_block = 23;
+                document.getElementById("start_hour").value = "10pm";
+                document.getElementById("end_hour").value = "11pm";
+                break;
+            case 24:
+                hour_block = 24;
+                document.getElementById("start_hour").value = "11pm";
+                document.getElementById("end_hour").value = "12am";
+                break;
+            default:
+                break;
+        }
+        var day_month;
+        switch (Math.floor(x / (canvas.width/9))) {
+            case 1:
+                day_month = 0;
+                break;
+            case 2:
+                day_month = 1;
+                break;
+            case 3:
+                day_month = 2;
+                break;
+            case 4:
+                day_month = 3;
+                break;
+            case 5:
+                day_month = 4;
+                break;
+            case 6:
+                day_month = 5;
+                break;
+            case 7:
+                day_month = 6;
+                break;
+            default:
+                break;
+        }
+        
+        if ((y > 30) && (x > Math.floor(canvas.width/9)))
+            openScheduleForm();
+            
+        ctx.fillStyle = "#FF0000";
+        ctx.fillRect((day_month + 1) * (canvas.width/9), hour_block * 30, (canvas.width/9), 30);
+            
+        // Gets the day of the month
+        var str = window.location.href;
+        
+        const myArr = str.split("/");
+        
+        var day = myArr[6];
+        var month = myArr[5];
+        var year = myArr[4];
+            
+        var new_date = new Date(year, month - 1, day);
+        
+        // getDay() gets the day of the week (0-6)
+        new_date.setDate(new_date.getDate() - (new_date.getDay() - day_month));
+        document.getElementById("DAY").value = new_date.getDate();
+    }
 }
 
 
@@ -430,7 +454,6 @@ function showDay(event) {
 // Contains the eventListener for most elements
 document.addEventListener('DOMContentLoaded', function() {
     var e = document.getElementById("scheForm");
-    //console.log(e.children);
     
     // Creates the horizontal lines in the canvas
     var canvas = document.getElementById("myCanvas");
