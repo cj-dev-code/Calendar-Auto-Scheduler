@@ -504,8 +504,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Creates the horizontal lines in the canvas
     var canvas = document.getElementById("myCanvas");
     
-    //const objects = JSON.parse(document.getElementById('tasks').textContent);
-    //console.log(objects);
+    const objects = JSON.parse(document.getElementById('tasks').textContent)[0];
+    console.log(objects);
     
     canvas.width = window.screen.width - 130;
     var ctx = canvas.getContext("2d");

@@ -74,6 +74,11 @@
                         </select>
                         <label for="curTasks">Current Tasks:</label>
                         <select id="curTasks" name="curTasks">
+                            {% if task_list %}
+                                {% for task in task_list %}
+                                    <option>{{ task.task_name }}</option>
+                                {% endfor %}
+                            {% endif %}
                         </select>
                         <label for="start_hour">
                             <strong>Start Hour</strong>
@@ -136,7 +141,5 @@
     </body>
 <!-- Can later call in javascript -->
 {{ sunday|json_script:'day' }}
+{{ task_list|json_script:'tasks'}}
 </html>
-<script>
-    val = "{{ sunday }}";
-</script>
