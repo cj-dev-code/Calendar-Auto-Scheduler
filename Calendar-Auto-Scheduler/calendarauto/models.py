@@ -8,8 +8,8 @@ from django.utils.timezone import make_aware
 class GenericTask(models.Model):
     task_name = models.CharField(max_length=100, default = "None")
     task_description = models.CharField(max_length=300,default='None')
-    deadline = models.DateTimeField('Deadline')
-    do_after = models.DateTimeField('Do After', default=timezone.now) # Do the task by 
+    deadline = models.DateTimeField('Deadline', null=True)
+    do_after = models.DateTimeField('Do After', default=timezone.now, null=True) # Do the task by 
     est_time_to_complete = models.TimeField("est. time to complete") # Est time to complete
     completed = models.BooleanField(default=False) # Whether the task is completed or not
     location = models.CharField(max_length = 300) # The location of the task
@@ -65,6 +65,7 @@ class GenericHourBlock(models.Model):
             else:
                 return objects[mid]
         return None
+    
     def populate(self):
         options = GenericTask.objects.all()
                                                     # if it starts before the block ends, it's an option!
@@ -72,6 +73,10 @@ class GenericHourBlock(models.Model):
         refined_options = options.filter(id__in = selection)
         if len(refined_options):
             self.current_task = refined_options.earliest()
+        if self.get_current_task() == None:
+            for i in options:
+                if i.do_after == None or i.deadline == None:
+                    self.current_task = i
         self.save()
         
     def get_current_task(self):

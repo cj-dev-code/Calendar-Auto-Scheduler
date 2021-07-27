@@ -119,4 +119,5 @@ def schedule_hour_block(request, year, month, day):
         newblock.save()
         print('second call', newBlock)
     newBlock.populate()
+    print(newBlock)
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
