@@ -506,6 +506,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const objects = JSON.parse(document.getElementById('tasks').textContent)[0];
     console.log(objects);
+    const objects2 = JSON.parse(document.getElementById('blocks').textContent)[0];
+    console.log(objects2);
     
     canvas.width = window.screen.width - 130;
     var ctx = canvas.getContext("2d");

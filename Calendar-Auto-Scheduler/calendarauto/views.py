@@ -30,7 +30,11 @@ def CalendarView(request, year, month, day):
     sun = today - datetime.timedelta(idx)
     sat = today + datetime.timedelta(6 - idx)
     
-    return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 'saturday' : sat, 'task_list' : list(GenericTask.objects.values())})
+    return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 
+                                                          'saturday' : sat, 
+                                                          'task_list' : list(GenericTask.objects.values()),
+                                                          'hour_blocks' : list(GenericHourBlock.objects.values()),
+                                                          })
     
 class TodoView(generic.ListView):
     template_name = 'calendarauto/todolist.html'
@@ -114,9 +118,9 @@ def schedule_hour_block(request, year, month, day):
     newBlock = GenericHourBlock.get_hour(day, month, year, start_time)
     print('First call',newBlock, type(newBlock), str(newBlock))
     if type(newBlock) == type(None):
-        newblock = GenericHourBlock(datetime=datetime.datetime(year=year, month=month, day=day, hour=start_time))
+        newBlock = GenericHourBlock(datetime=datetime.datetime(year=year, month=month, day=day, hour=start_time))
         print('second call', newBlock)
-        newblock.save()
+        newBlock.save()
         print('second call', newBlock)
     newBlock.populate()
     print(newBlock)
