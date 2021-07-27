@@ -6,8 +6,11 @@ from django.template import loader
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+<<<<<<< Updated upstream
 from django.core import serializers
 #from datetime import datetime, time
+=======
+>>>>>>> Stashed changes
 import datetime
 
 from .models import GenericTask, GenericHourBlock
@@ -93,7 +96,6 @@ def add_new_task(request,year, month, day):
 def schedule_hour_block(request, year, month, day): 
     # Find the hour block associated with this hour.
         # if it doesn't exist, then make a new one.
-    
     # Call the populate method on the hour block.
     # Format the start time from the front end into military time for our generic block
     print(request.POST)
@@ -112,12 +114,9 @@ def schedule_hour_block(request, year, month, day):
     
     # And get the hour block associated with that hour (make one if it's not there)
     newBlock = GenericHourBlock.get_hour(day, month, year, start_time)
-    print('First call',newBlock, type(newBlock), str(newBlock))
     if type(newBlock) == type(None):
-        newblock = GenericHourBlock(datetime=datetime.datetime(year=year, month=month, day=day, hour=start_time))
-        print('second call', newBlock)
-        newblock.save()
-        print('second call', newBlock)
+        newBlock = GenericHourBlock(datetime=timezone.make_aware(datetime.datetime(year=year, month=month, day=day, hour=start_time)))
+        #newblock.save()
+        #print('second call', newBlock)
     newBlock.populate()
-    print(newBlock)
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
