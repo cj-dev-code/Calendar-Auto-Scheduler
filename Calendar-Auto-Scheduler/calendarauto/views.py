@@ -6,14 +6,13 @@ from django.template import loader
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-<<<<<<< Updated upstream
 from django.core import serializers
 #from datetime import datetime, time
-=======
->>>>>>> Stashed changes
 import datetime
 
 from .models import GenericTask, GenericHourBlock
+import sys
+
 
 # If the url is going to use varibles, then they must be listed here
 # in the function name if it is a custom view i.e. what we have here
@@ -72,8 +71,7 @@ def get_datetime_from_post(post_string):
     return datetime.datetime(year=year, month=month, day=day, hour=hr, minute=minute)
 
 def add_new_task(request,year, month, day):
-    print(str(request.POST))
-    print("Hello world")
+    print(sys._getframe().f_code.co_name)
     
     # Always get the time from the datetime function for the deadline
     do_after = get_datetime_from_post(request.POST['start_time'])
@@ -94,6 +92,7 @@ def add_new_task(request,year, month, day):
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
 def schedule_hour_block(request, year, month, day): 
+    print(sys._getframe().f_code.co_name)
     # Find the hour block associated with this hour.
         # if it doesn't exist, then make a new one.
     # Call the populate method on the hour block.
