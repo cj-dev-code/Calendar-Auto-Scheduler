@@ -125,12 +125,13 @@ class GenericHourBlockTests(TestCase):
         # Expected Behavior
         # Populates the block with the earliest result
         
-        # Also test multiple after.
+        # The invalid task.
         gtask_deadline = timezone.make_aware(datetime(2021, 7, 13, 12, 0, 0))
         gtask_hrs_to_c = 2
         time_created = timezone.make_aware(datetime(2021, 7, 12, 12, 0, 0))
         do_after = timezone.make_aware(datetime(2021, 7, 13, 10, 15,0))
         
+        # The valid task.
         gtask_deadline2 = timezone.make_aware(datetime(2021, 7, 13, 12, 0, 0))
         gtask_hrs_to_c2 = .25
         time_created2 = timezone.make_aware(datetime(2021, 7, 12, 12, 0, 0))
@@ -146,3 +147,68 @@ class GenericHourBlockTests(TestCase):
         hourblock.populate()
         
         self.assertIs(hourblock.get_current_task().id,gtask2.id)
+
+    def test_populate_set_new_task_to_scheduled(self):
+        print()
+        print(sys._getframe().f_code.co_name)
+        # Get a valid task
+        gtask_deadline2 = timezone.make_aware(datetime(2021, 7, 13, 12, 0, 0))
+        gtask_hrs_to_c2 = .25
+        time_created2 = timezone.make_aware(datetime(2021, 7, 12, 12, 0, 0))
+        do_after2 = timezone.make_aware(datetime(2021, 7, 13, 10, 15,0))
+        
+        gtask2 = create_generic_task(gtask_deadline2, gtask_hrs_to_c2, do_after=do_after2, time_created=time_created2,
+                                    task_name = "Test do_after before block start and deadline before block end2")
+        
+        # Make an hour block in that hour
+        hour_block_datetime = timezone.make_aware(datetime(2021, 7, 13, 11, 0,0))
+        hourblock = create_hour_block(hour_block_datetime)
+        hourblock.populate()
+        
+        self.assertIs(hourblock.get_current_task().scheduled, True)
+        
+    def test_populate_wont_double_schedule_a_task(self):
+        print()
+        print(sys._getframe().f_code.co_name)
+        # Get a valid task
+        gtask_deadline2 = timezone.make_aware(datetime(2021, 7, 13, 12, 0, 0))
+        gtask_hrs_to_c2 = .25
+        time_created2 = timezone.make_aware(datetime(2021, 7, 12, 12, 0, 0))
+        do_after2 = timezone.make_aware(datetime(2021, 7, 13, 10, 15,0))
+        
+        gtask2 = create_generic_task(gtask_deadline2, gtask_hrs_to_c2, do_after=do_after2, time_created=time_created2,
+                                    task_name = "Test do_after before block start and deadline before block end2")
+        
+        # Make an hour block in that hour
+        hour_block_datetime = timezone.make_aware(datetime(2021, 7, 13, 11, 0,0))
+        hourblock = create_hour_block(hour_block_datetime)
+        hourblock.populate()
+        
+        # Make an hour block in that hour
+        hour_block2_datetime = timezone.make_aware(datetime(2021, 7, 13, 11, 0,0))
+        hourblock2 = create_hour_block(hour_block2_datetime)
+        hourblock2.populate()
+        
+        self.assertIs(hourblock.get_current_task().scheduled, True)
+        self.assertIs(hourblock2.get_current_task(), None)
+        
+    def test_assign_a_task_that_fits_perfectly_in_the_block(self):
+        print()
+        print(sys._getframe().f_code.co_name)
+        
+        
+        # Make a valid task. 1 hour long between 11a and 12p on July 12, 2021
+        gtask_deadline2 = timezone.make_aware(datetime(2021, 7, 13, 12, 0, 0))
+        gtask_hrs_to_c2 = 1
+        time_created2 = timezone.make_aware(datetime(2021, 7, 12, 12, 0, 0))
+        do_after2 = timezone.make_aware(datetime(2021, 7, 13, 11, 0,0))
+        taskname = 'Test do_after before block start and deadline before block end2'
+        gtask2 = create_generic_task(gtask_deadline2, gtask_hrs_to_c2, do_after=do_after2, time_created=time_created2,
+                                    task_name = taskname)
+        # Make an hour block in that hour
+        hour_block_datetime = timezone.make_aware(datetime(2021, 7, 13, 11, 0,0))
+        hourblock = create_hour_block(hour_block_datetime)
+        hourblock.populate()
+        
+        self.assertIn(hourblock.get_current_task().task_name, str(taskname))
+        
