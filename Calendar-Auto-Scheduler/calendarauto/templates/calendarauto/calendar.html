@@ -38,11 +38,11 @@
                     <label for="start_time">
                         <strong>Start Time</strong>
                     </label>
-                    <input type="datetime-local" id="start_time" name="start_time" required>
+                    <input type="datetime-local" id="start_time" name="start_time">
                     <label for="end_time">
                         <strong>Deadline</strong>
                     </label>
-                    <input type="datetime-local" id="end_time" name="end_time" required>
+                    <input type="datetime-local" id="end_time" name="end_time">
                     <label for="duration">
                         <strong>Duration</strong>
                     </label>
@@ -140,7 +140,8 @@
         <p id="temp"></p>
     </body>
 <!-- Can later call in javascript -->
-{{ sunday|json_script:'day' }}
+{{ sunday|json_script:'sunday' }}
+{{ saturday|json_script:'saturday' }}
 {{ task_list|json_script:'tasks'}}
 {{ hour_blocks|json_script:'blocks'}}
 </html>

@@ -242,8 +242,6 @@ function getEventLocation(element,event){
 
 
 function showDay(event) {
-    
-    
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
     var eventLocation = getEventLocation(canvas, event);
@@ -255,217 +253,194 @@ function showDay(event) {
         // Do something if the pixel is transparent
     //}
     
+    var rect = canvas.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    
+    var hour_block = Math.floor(y / 30);
+    var day_month = Math.floor(x / (canvas.width/9));
+    
     var hex = "#" + ("000000" + rgbToHex(pixelData[0], pixelData[1], pixelData[2])).slice(-6);
     if (hex === "#ff0000") {
+        // Gets the day of the month
+        var str = window.location.href;
         
+        const myArr = str.split("/");
+        
+        var day = myArr[6];
+        var month = myArr[5];
+        var year = myArr[4];
+            
+        var new_date = new Date(year, month - 1, day, hour_block + 1);
+        
+        // getDay() gets the day of the week (0-6)
+        new_date.setDate(new_date.getDate() - (new_date.getDay() - (day_month - 1)));
+        
+        const objects = JSON.parse(document.getElementById('blocks').textContent);
+        
+        
+        
+        for (x of objects) {
+            var sche_date = new Date(x.datetime);
+            console.log(sche_date);
+            console.log(new_date);
+            if ((sche_date.getFullYear() == new_date.getFullYear()) && (sche_date.getMonth() == new_date.getMonth()) && (sche_date.getDate() == new_date.getDate()) && (sche_date.getHours() == new_date.getHours())) {
+                console.log("HIT")
+            }
+        }
         
     }
     else {
-        var rect = canvas.getBoundingClientRect();
-        var x = event.clientX - rect.left;
-        var y = event.clientY - rect.top;
-        
         if ((y < 30) && (x < Math.floor(canvas.width/9))) {
             window.location.replace(getFrontUrl(true, false));  
         }
         else if ((y < 30) && (x > canvas.width - Math.floor(canvas.width/9))) {
             window.location.replace(getFrontUrl(true, true));  
         }
-        var hour_block;
-        switch (Math.floor(y / 30)) {
+        switch (hour_block) {
             case 1:
-                hour_block = 1;
-                document.getElementById("start_hour").value = "1am";
-                document.getElementById("end_hour").value = "2am";
-                document.getElementById("start_time1").value = "1am";
-                document.getElementById("end_time1").value = "2am";
-                break;
-            case 2:
-                hour_block = 2;
-                document.getElementById("start_hour").value = "2am";
-                document.getElementById("end_hour").value = "3am";
-                document.getElementById("start_time1").value = "2am";
-                document.getElementById("end_time1").value = "3am";
-                break;
-            case 3:
-                hour_block = 3;
-                document.getElementById("start_hour").value = "3am";
-                document.getElementById("end_hour").value = "4am";
-                document.getElementById("start_time1").value = "3am";
-                document.getElementById("end_time1").value = "4am";
-                break;
-            case 4:
-                hour_block = 4;
-                document.getElementById("start_hour").value = "4am";
-                document.getElementById("end_hour").value = "5am";
-                document.getElementById("start_time1").value = "4am";
-                document.getElementById("end_time1").value = "5am";
-                break;
-            case 5:
-                hour_block = 5;
-                document.getElementById("start_hour").value = "5am";
-                document.getElementById("end_hour").value = "6am";
-                document.getElementById("start_time1").value = "5am";
-                document.getElementById("end_time1").value = "6am";
-                break;
-            case 6:
-                hour_block = 6;
-                document.getElementById("start_hour").value = "6am";
-                document.getElementById("end_hour").value = "7am";
-                document.getElementById("start_time1").value = "6am";
-                document.getElementById("end_time1").value = "7am";
-                break;
-            case 7:
-                hour_block = 7;
-                document.getElementById("start_hour").value = "7am";
-                document.getElementById("end_hour").value = "8am";
-                document.getElementById("start_time1").value = "7am";
-                document.getElementById("end_time1").value = "8am";
-                break;
-            case 8:
-                hour_block = 8;
-                document.getElementById("start_hour").value = "8am";
-                document.getElementById("end_hour").value = "9am";
-                document.getElementById("start_time1").value = "8am";
-                document.getElementById("end_time1").value = "9am";
-                break;
-            case 9:
-                hour_block = 9;
-                document.getElementById("start_hour").value = "9am";
-                document.getElementById("end_hour").value = "10am";
-                document.getElementById("start_time1").value = "9am";
-                document.getElementById("end_time1").value = "10am";
-                break;
-            case 10:
-                hour_block = 10;
-                document.getElementById("start_hour").value = "10am";
-                document.getElementById("end_hour").value = "11am";
-                document.getElementById("start_time1").value = "10am";
-                document.getElementById("end_time1").value = "11am";
-                break;
-            case 11:
-                hour_block = 11;
-                document.getElementById("start_hour").value = "11am";
-                document.getElementById("end_hour").value = "12pm";
-                document.getElementById("start_time1").value = "11am";
-                document.getElementById("end_time1").value = "12pm";
-                break;
-            case 12:
-                hour_block = 12;
-                document.getElementById("start_hour").value = "12pm";
-                document.getElementById("end_hour").value = "1pm";
-                document.getElementById("start_time1").value = "12pm";
-                document.getElementById("end_time1").value = "1pm";
-                break;
-            case 13:
-                hour_block = 13;
-                document.getElementById("start_hour").value = "1pm";
-                document.getElementById("end_hour").value = "2pm";
-                document.getElementById("start_time1").value = "1pm";
-                document.getElementById("end_time1").value = "2pm";
-                break;
-            case 14:
-                hour_block = 14;
-                document.getElementById("start_hour").value = "2pm";
-                document.getElementById("end_hour").value = "3pm";
-                document.getElementById("start_time1").value = "2pm";
-                document.getElementById("end_time1").value = "3pm";
-                break;
-            case 15:
-                hour_block = 15;
-                document.getElementById("start_hour").value = "3pm";
-                document.getElementById("end_hour").value = "4pm";
-                document.getElementById("start_time1").value = "3pm";
-                document.getElementById("end_time1").value = "4pm";
-                break;
-            case 16:
-                hour_block = 16;
-                document.getElementById("start_hour").value = "4pm";
-                document.getElementById("end_hour").value = "5pm";
-                document.getElementById("start_time1").value = "4pm";
-                document.getElementById("end_time1").value = "5pm";
-                break;
-            case 17:
-                hour_block = 17;
-                document.getElementById("start_hour").value = "5pm";
-                document.getElementById("end_hour").value = "6pm";
-                document.getElementById("start_time1").value = "5pm";
-                document.getElementById("end_time1").value = "6pm";
-                break;
-            case 18:
-                hour_block = 18;
-                document.getElementById("start_hour").value = "6pm";
-                document.getElementById("end_hour").value = "7pm";
-                document.getElementById("start_time1").value = "6pm";
-                document.getElementById("end_time1").value = "7pm";
-                break;
-            case 19:
-                hour_block = 19;
-                document.getElementById("start_hour").value = "7pm";
-                document.getElementById("end_hour").value = "8pm";
-                document.getElementById("start_time1").value = "7pm";
-                document.getElementById("end_time1").value = "8pm";
-                break;
-            case 20:
-                hour_block = 20;
-                document.getElementById("start_hour").value = "8pm";
-                document.getElementById("end_hour").value = "9pm";
-                document.getElementById("start_time1").value = "8pm";
-                document.getElementById("end_time1").value = "9pm";
-                break;
-            case 21:
-                hour_block = 21;
-                document.getElementById("start_hour").value = "9pm";
-                document.getElementById("end_hour").value = "10pm";
-                document.getElementById("start_time1").value = "9pm";
-                document.getElementById("end_time1").value = "10pm";
-                break;
-            case 22:
-                hour_block = 22;
-                document.getElementById("start_hour").value = "10pm";
-                document.getElementById("end_hour").value = "11pm";
-                document.getElementById("start_time1").value = "10pm";
-                document.getElementById("end_time1").value = "11pm";
-                break;
-            case 23:
-                hour_block = 23;
-                document.getElementById("start_hour").value = "11pm";
-                document.getElementById("end_hour").value = "12am";
-                document.getElementById("start_time1").value = "11pm";
-                document.getElementById("end_time1").value = "12am";
-                break;
-            case 24:
-                hour_block = 24;
                 document.getElementById("start_hour").value = "12am";
                 document.getElementById("end_hour").value = "1am";
                 document.getElementById("start_time1").value = "12am";
                 document.getElementById("end_time1").value = "1am";
                 break;
-            default:
-                break;
-        }
-        var day_month;
-        switch (Math.floor(x / (canvas.width/9))) {
-            case 1:
-                day_month = 0;
-                break;
             case 2:
-                day_month = 1;
+                document.getElementById("start_hour").value = "1am";
+                document.getElementById("end_hour").value = "2am";
+                document.getElementById("start_time1").value = "1am";
+                document.getElementById("end_time1").value = "2am";
                 break;
             case 3:
-                day_month = 2;
+                document.getElementById("start_hour").value = "2am";
+                document.getElementById("end_hour").value = "3am";
+                document.getElementById("start_time1").value = "2am";
+                document.getElementById("end_time1").value = "3am";
                 break;
             case 4:
-                day_month = 3;
+                document.getElementById("start_hour").value = "3am";
+                document.getElementById("end_hour").value = "4am";
+                document.getElementById("start_time1").value = "3am";
+                document.getElementById("end_time1").value = "4am";
                 break;
             case 5:
-                day_month = 4;
+                document.getElementById("start_hour").value = "4am";
+                document.getElementById("end_hour").value = "5am";
+                document.getElementById("start_time1").value = "4am";
+                document.getElementById("end_time1").value = "5am";
                 break;
             case 6:
-                day_month = 5;
+                document.getElementById("start_hour").value = "5am";
+                document.getElementById("end_hour").value = "6am";
+                document.getElementById("start_time1").value = "5am";
+                document.getElementById("end_time1").value = "6am";
                 break;
             case 7:
-                day_month = 6;
+                document.getElementById("start_hour").value = "6am";
+                document.getElementById("end_hour").value = "7am";
+                document.getElementById("start_time1").value = "6am";
+                document.getElementById("end_time1").value = "7am";
+                break;
+            case 8:
+                document.getElementById("start_hour").value = "7am";
+                document.getElementById("end_hour").value = "8am";
+                document.getElementById("start_time1").value = "7am";
+                document.getElementById("end_time1").value = "8am";
+                break;
+            case 9:
+                document.getElementById("start_hour").value = "8am";
+                document.getElementById("end_hour").value = "9am";
+                document.getElementById("start_time1").value = "8am";
+                document.getElementById("end_time1").value = "9am";
+                break;
+            case 10:
+                document.getElementById("start_hour").value = "9am";
+                document.getElementById("end_hour").value = "10am";
+                document.getElementById("start_time1").value = "9am";
+                document.getElementById("end_time1").value = "10am";
+                break;
+            case 11:
+                document.getElementById("start_hour").value = "10am";
+                document.getElementById("end_hour").value = "11am";
+                document.getElementById("start_time1").value = "10am";
+                document.getElementById("end_time1").value = "11am";
+                break;
+            case 12:
+                document.getElementById("start_hour").value = "11am";
+                document.getElementById("end_hour").value = "12pm";
+                document.getElementById("start_time1").value = "11am";
+                document.getElementById("end_time1").value = "12pm";
+                break;
+            case 13:
+                document.getElementById("start_hour").value = "12pm";
+                document.getElementById("end_hour").value = "1pm";
+                document.getElementById("start_time1").value = "12pm";
+                document.getElementById("end_time1").value = "1pm";
+                break;
+            case 14:
+                document.getElementById("start_hour").value = "1pm";
+                document.getElementById("end_hour").value = "2pm";
+                document.getElementById("start_time1").value = "1pm";
+                document.getElementById("end_time1").value = "2pm";
+                break;
+            case 15:
+                document.getElementById("start_hour").value = "2pm";
+                document.getElementById("end_hour").value = "3pm";
+                document.getElementById("start_time1").value = "2pm";
+                document.getElementById("end_time1").value = "3pm";
+                break;
+            case 16:
+                document.getElementById("start_hour").value = "3pm";
+                document.getElementById("end_hour").value = "4pm";
+                document.getElementById("start_time1").value = "3pm";
+                document.getElementById("end_time1").value = "4pm";
+                break;
+            case 17:
+                document.getElementById("start_hour").value = "4pm";
+                document.getElementById("end_hour").value = "5pm";
+                document.getElementById("start_time1").value = "4pm";
+                document.getElementById("end_time1").value = "5pm";
+                break;
+            case 18:
+                document.getElementById("start_hour").value = "5pm";
+                document.getElementById("end_hour").value = "6pm";
+                document.getElementById("start_time1").value = "5pm";
+                document.getElementById("end_time1").value = "6pm";
+                break;
+            case 19:
+                document.getElementById("start_hour").value = "6pm";
+                document.getElementById("end_hour").value = "7pm";
+                document.getElementById("start_time1").value = "6pm";
+                document.getElementById("end_time1").value = "7pm";
+                break;
+            case 20:
+                document.getElementById("start_hour").value = "7pm";
+                document.getElementById("end_hour").value = "8pm";
+                document.getElementById("start_time1").value = "7pm";
+                document.getElementById("end_time1").value = "8pm";
+                break;
+            case 21:
+                document.getElementById("start_hour").value = "8pm";
+                document.getElementById("end_hour").value = "9pm";
+                document.getElementById("start_time1").value = "8pm";
+                document.getElementById("end_time1").value = "9pm";
+                break;
+            case 22:
+                document.getElementById("start_hour").value = "9pm";
+                document.getElementById("end_hour").value = "10pm";
+                document.getElementById("start_time1").value = "9pm";
+                document.getElementById("end_time1").value = "10pm";
+                break;
+            case 23:
+                document.getElementById("start_hour").value = "10pm";
+                document.getElementById("end_hour").value = "11pm";
+                document.getElementById("start_time1").value = "10pm";
+                document.getElementById("end_time1").value = "11pm";
+                break;
+            case 24:
+                document.getElementById("start_hour").value = "11pm";
+                document.getElementById("end_hour").value = "12am";
+                document.getElementById("start_time1").value = "11pm";
+                document.getElementById("end_time1").value = "12am";
                 break;
             default:
                 break;
@@ -474,8 +449,10 @@ function showDay(event) {
         if ((y > 30) && ((x > Math.floor(canvas.width/9)) && (x < (canvas.width - Math.floor(canvas.width/9)))))
             openScheduleForm();
             
-        ctx.fillStyle = "#FF0000";
-        ctx.fillRect((day_month + 1) * (canvas.width/9), hour_block * 30, (canvas.width/9), 30);
+        if ((hour_block > 0) && ((0 < day_month) && (day_month < 8))) {
+            ctx.fillStyle = "#FF0000";
+            ctx.fillRect(day_month * (canvas.width/9), hour_block * 30, (canvas.width/9), 30);
+        }
             
         // Gets the day of the month
         var str = window.location.href;
@@ -489,7 +466,7 @@ function showDay(event) {
         var new_date = new Date(year, month - 1, day);
         
         // getDay() gets the day of the week (0-6)
-        new_date.setDate(new_date.getDate() - (new_date.getDay() - day_month));
+        new_date.setDate(new_date.getDate() - (new_date.getDay() - (day_month - 1)));
         document.getElementById("DAY").value = new_date.getDate();
     }
 }
@@ -504,10 +481,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Creates the horizontal lines in the canvas
     var canvas = document.getElementById("myCanvas");
     
-    const objects = JSON.parse(document.getElementById('tasks').textContent)[0];
+    const objects = JSON.parse(document.getElementById('tasks').textContent);
     console.log(objects);
-    const objects2 = JSON.parse(document.getElementById('blocks').textContent)[0];
+    const objects2 = JSON.parse(document.getElementById('blocks').textContent);
     console.log(objects2);
+    const sunday = JSON.parse(document.getElementById('sunday').textContent);
+    var date_sunday = new Date(sunday);
+    const saturday = JSON.parse(document.getElementById('saturday').textContent);
+    var date_saturday = new Date(saturday);
+    date_saturday.setDate(date_saturday.getDate() + 1);
+    console.log(date_sunday);
+    console.log(date_saturday);
+    
     
     canvas.width = window.screen.width - 130;
     var ctx = canvas.getContext("2d");
@@ -521,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Adds the top labels to the calendar
-    const week_day_labels = ["Sunday","Monday","Tuesday", "Wednesday","Thursday","Friday","Saturday"];
+    const week_day_labels = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     var label_line_height = 30;
     ctx.font = "25px Arial";
     ctx.strokeText("<- Previous", 0, label_line_height - 5);
@@ -538,13 +523,26 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.stroke();
         
         if (i < 11) {
-            ctx.strokeText(((i % 12) + 1) + " am", 0, label_line_height + 30*(i + 1) - 4);
+            ctx.strokeText(((i % 12) + 1) + " am", 0, label_line_height + 30*(i + 1) + 8);
         }
         else if (i == 23) {
-            ctx.strokeText("12 am", 0, label_line_height + 30*24 - 4);
+            ctx.strokeText("12 am", 0, label_line_height + 30*24 + 8);
         }
         else {
-            ctx.strokeText(((i % 12) + 1) + " pm", 0, label_line_height + 30*(i + 1) - 4);
+            ctx.strokeText(((i % 12) + 1) + " pm", 0, label_line_height + 30*(i + 1) + 8);
         }
     }
+    
+    for (x of objects2) {
+        var sche_date = new Date(x.datetime);
+        // Hardcoded to adjust to EST, might need to fix later, ask
+        sche_date.setHours(sche_date.getHours() - 1);
+        x.datetime = sche_date;
+        ctx.fillStyle = "#FF0000";
+        if ((sche_date > date_sunday) && (sche_date < date_saturday)) {
+            ctx.fillRect((sche_date.getDay() + 1) * (canvas.width/9), (sche_date.getHours() + 1) * 30, (canvas.width/9), 30);
+        }
+    }
+    
+    
 });

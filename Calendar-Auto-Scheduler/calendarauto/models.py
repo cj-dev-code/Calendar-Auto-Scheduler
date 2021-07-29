@@ -23,6 +23,8 @@ class GenericTask(models.Model):
         return self.task_name + self.task_description + ". Due by " + str(self.deadline) + ". Start by " + str(self.do_after) + ". Duration: " + str(self.est_time_to_complete)
 
     def get_starting_deadline(self):
+        if (self.deadline != None):
+            return make_aware(datetime.max - timedelta(days=365))
         return self.deadline - timedelta(hours = self.est_time_to_complete.hour)
     class Meta:
         get_latest_by = 'time_created'
