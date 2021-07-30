@@ -31,12 +31,16 @@ def CalendarView(request, year, month, day):
     idx = (today.weekday() + 1) % 7
     sun = today - datetime.timedelta(idx)
     sat = today + datetime.timedelta(6 - idx)
+<<<<<<< HEAD
     
     data = serializers.serialize("json", GenericHourBlock.objects.all())
     
     if (list(GenericTask.objects.values())):
         print(list(GenericTask.objects.values()))
     
+=======
+        
+>>>>>>> def4e5e8b32cde43c3932f6ba2da249498ee6999
     return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 
                                                           'saturday' : sat, 
                                                           'task_list' : list(GenericTask.objects.values()),
@@ -59,7 +63,7 @@ def create_generic_task(deadline, hours_to_complete,
                     completed=False,scheduled=False, time_created=None, location='Default',
                     task_name='Default', task_description='Default',
                     do_after = None):
-    est_time = datetime.time(int(hours_to_complete), int((hours_to_complete % 1)*60), 0)
+    est_time = datetime.timedelta(hours=int(hours_to_complete), minutes=int((hours_to_complete % 1)*60))
     time_assigned = timezone.now() if time_created == None else time_created
     do_after = timezone.now() if do_after == None else do_after
     return GenericTask.objects.create(est_time_to_complete=est_time,
@@ -83,22 +87,23 @@ def get_datetime_from_post(post_string):
 def add_new_task(request,year, month, day):
     print(sys._getframe().f_code.co_name)
     
+    # Upgrade add_new_task it makes the ceil of duration number of tasks 
+    # So that tasks are at most an hour long.
     # Always get the time from the datetime function for the deadline
     do_after = get_datetime_from_post(request.POST['start_time'])
     deadline = get_datetime_from_post(request.POST['end_time'])
-    task_duration = float(request.POST['duration'])
-    
+    task_duration = float(request.POST['duration'])-.0001
     # make sure the user didn't put an illegal time in.
     if datetime.timedelta(hours=task_duration // 1, minutes=int((task_duration % 1)*60))+ do_after > deadline:
         print('invalid.')
         return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
-    
-    
-    task = create_generic_task(deadline, task_duration, do_after=do_after,
-                        task_name = request.POST['task_name'],
-                        task_description=request.POST['task_desc'])
-    task.save()
     print('attempted to save task')
+    for i in range(0, int(task_duration) + 1):
+        print('saving task')
+        task = create_generic_task(deadline, 1 if i < int(task_duration) else task_duration % 1, do_after=do_after,
+                        task_name = request.POST['task_name'] + ('(' + str(i + 1) + '/' + str(int(task_duration) + 1) + ')' if task_duration > 1 else ''),
+                        task_description=request.POST['task_desc'])
+        task.save()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
 def schedule_hour_block(request, year, month, day): 

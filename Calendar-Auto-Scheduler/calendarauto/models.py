@@ -10,7 +10,7 @@ class GenericTask(models.Model):
     task_description = models.CharField(max_length=300,default='None')
     deadline = models.DateTimeField('Deadline', null=True)
     do_after = models.DateTimeField('Do After', default=timezone.now, null=True) # Do the task by 
-    est_time_to_complete = models.TimeField("est. time to complete") # Est time to complete
+    est_time_to_complete = models.DurationField(default=timedelta(hours=1)) # Est time to complete
     completed = models.BooleanField(default=False) # Whether the task is completed or not
     location = models.CharField(max_length = 300) # The location of the task
     scheduled = models.BooleanField(default=False) # Whether the task is scheduled or not
@@ -25,7 +25,7 @@ class GenericTask(models.Model):
     def get_starting_deadline(self):
         if self.deadline == None:
             return make_aware(datetime.max - timedelta(days=365))
-        return self.deadline - timedelta(hours = self.est_time_to_complete.hour)
+        return self.deadline - self.est_time_to_complete
     class Meta:
         get_latest_by = 'time_created'
         
