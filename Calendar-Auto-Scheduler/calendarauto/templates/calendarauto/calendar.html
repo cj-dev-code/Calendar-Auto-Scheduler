@@ -76,7 +76,9 @@
                         <select id="curTasks" name="curTasks">
                             {% if task_list %}
                                 {% for task in task_list %}
-                                    <option>{{ task.task_name }}</option>
+                                    {% if not task.scheduled %}
+                                        <option>{{ task.task_name }}</option>
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
                         </select>
@@ -103,6 +105,7 @@
                     </div>
                     <input type="text" id="start_time1" name="start_time1" class="ghost">
                     <input type="text" id="end_time1" name="end_time1" class="ghost">
+                    <input type="text" id="day_week" name="day_week" class="ghost">
                     <input type="text" id="DAY" name="DAY" class="ghost">
                     <div id="specForm">
                         <label for="friends">
@@ -144,4 +147,5 @@
 {{ saturday|json_script:'saturday' }}
 {{ task_list|json_script:'tasks'}}
 {{ hour_blocks|json_script:'blocks'}}
+{{ hour_info|json_script:'info'}}
 </html>

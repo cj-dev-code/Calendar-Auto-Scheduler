@@ -32,10 +32,16 @@ def CalendarView(request, year, month, day):
     sun = today - datetime.timedelta(idx)
     sat = today + datetime.timedelta(6 - idx)
     
+    data = serializers.serialize("json", GenericHourBlock.objects.all())
+    
+    if (list(GenericTask.objects.values())):
+        print(list(GenericTask.objects.values()))
+    
     return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 
                                                           'saturday' : sat, 
                                                           'task_list' : list(GenericTask.objects.values()),
                                                           'hour_blocks' : list(GenericHourBlock.objects.values()),
+                                                          'hour_info' : data,
                                                           })
     
 class TodoView(generic.ListView):

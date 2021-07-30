@@ -87,6 +87,103 @@ function openScheduleForm() {
 
 function closeScheduleForm() {
     document.getElementById("schedulepopupForm").style.display = "none";
+    var hour_block = 0;
+    switch (document.getElementById("start_hour").value) {
+        case '12am':
+            hour_block = 1;
+            break;
+        case '1am':
+            hour_block = 2;
+            break;
+        case '2am':
+            hour_block = 3;
+            break;
+        case '3am':
+            hour_block = 4;
+            break;
+        case '4am':
+            hour_block = 5;
+            break;
+        case '5am':
+            hour_block = 6;
+            break;
+        case '6am':
+            hour_block = 7;
+            break;
+        case '7am':
+            hour_block = 8;
+            break;
+        case '8am':
+            hour_block = 9;
+            break;
+        case '9am':
+            hour_block = 10;
+            break;
+        case '10am':
+            hour_block = 11;
+            break;
+        case '11am':
+            hour_block = 12;
+            break;
+        case '12pm':
+            hour_block = 13;
+            break;
+        case '1pm':
+            hour_block = 14;
+            break;
+        case '2pm':
+            hour_block = 15;
+            break;
+        case '3pm':
+            hour_block = 16;
+            break;
+        case '4pm':
+            hour_block = 17;
+            break;
+        case '5pm':
+            hour_block = 18;
+            break;
+        case '6pm':
+            hour_block = 19;
+            break;
+        case '7pm':
+            hour_block = 20;
+            break;
+        case '8pm':
+            hour_block = 21;
+            break;
+        case '9pm':
+            hour_block = 22;
+            break;
+        case '10pm':
+            hour_block = 23;
+            break;
+        case '11pm':
+            hour_block = 24;
+            break;
+        default:
+            break;
+    }
+    // Gets the day of the month
+    var str = window.location.href;
+        
+    const myArr = str.split("/");
+        
+    var day = myArr[6];
+    var month = myArr[5];
+    var year = myArr[4];
+            
+    var new_date = new Date(year, month - 1, day);      
+        
+    var day_week = document.getElementById("day_week").value - 1;
+    console.log(day_week);
+
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect((day_week + 1) * (canvas.width/9), hour_block * 30, (canvas.width/9), 30);
+    
+    drawCal(hour_block, day_week);
 }
 
 function changeForm() {
@@ -468,16 +565,33 @@ function showDay(event) {
         // getDay() gets the day of the week (0-6)
         new_date.setDate(new_date.getDate() - (new_date.getDay() - (day_month - 1)));
         document.getElementById("DAY").value = new_date.getDate();
+        document.getElementById("day_week").value = day_month;
     }
 }
 
-
+function drawCal(hour_block, day_week) {
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    
+    for (let i = 1; i < 3; i++) {
+        ctx.beginPath();
+        ctx.moveTo((canvas.width/9)*(i + day_week), 30 * hour_block);
+        ctx.lineTo((canvas.width/9)*(i + day_week), 30 * (hour_block + 1));
+        ctx.stroke();
+    }
+    
+    // Adds the time on the left 
+    for (let i = hour_block - 1; i < hour_block + 1; i++) {
+        ctx.beginPath();
+        ctx.moveTo((canvas.width/9)*(day_week + 1), 30 * (i + 1));
+        ctx.lineTo((canvas.width/9)*(day_week + 2), 30 * (i + 1));
+        ctx.stroke();
+    }
+}
 
 // Wait for page to load
 // Contains the eventListener for most elements
 document.addEventListener('DOMContentLoaded', function() {
-    var e = document.getElementById("scheForm");
-    
     // Creates the horizontal lines in the canvas
     var canvas = document.getElementById("myCanvas");
     
@@ -490,8 +604,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const saturday = JSON.parse(document.getElementById('saturday').textContent);
     var date_saturday = new Date(saturday);
     date_saturday.setDate(date_saturday.getDate() + 1);
-    console.log(date_sunday);
-    console.log(date_saturday);
+    
+    // Only has the string version
+    const hour_info = JSON.parse(document.getElementById('info').textContent);
     
     
     canvas.width = window.screen.width - 130;
@@ -522,25 +637,42 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.lineTo(canvas.width, label_line_height + 30 * i);
         ctx.stroke();
         
-        if (i < 11) {
-            ctx.strokeText(((i % 12) + 1) + " am", 0, label_line_height + 30*(i + 1) + 8);
+        if (i == 0) {
+            ctx.strokeText("12 am-1 am", 0, label_line_height + 30*(i + 1) - 4);
+        }
+        else if (i < 11) {
+            ctx.strokeText((i % 12) + " am-" + ((i % 12) + 1) + " am", 0, label_line_height + 30*(i + 1) - 4);
+        }
+        else if (i == 11) {
+            ctx.strokeText("11 am-12 pm", 0, label_line_height + 30*(i + 1) - 4);
+        }
+        else if (i == 12) {
+            ctx.strokeText("12 pm-1 pm", 0, label_line_height + 30*(i + 1) - 4);
         }
         else if (i == 23) {
-            ctx.strokeText("12 am", 0, label_line_height + 30*24 + 8);
+            ctx.strokeText("11 pm-12 am", 0, label_line_height + 30*24 - 4);
         }
         else {
-            ctx.strokeText(((i % 12) + 1) + " pm", 0, label_line_height + 30*(i + 1) + 8);
+            ctx.strokeText((i % 12) + " pm-" + ((i % 12) + 1) + " pm", 0, label_line_height + 30*(i + 1) - 4);
         }
     }
     
     for (x of objects2) {
         var sche_date = new Date(x.datetime);
-        // Hardcoded to adjust to EST, might need to fix later, ask
         sche_date.setHours(sche_date.getHours() - 1);
         x.datetime = sche_date;
         ctx.fillStyle = "#FF0000";
         if ((sche_date > date_sunday) && (sche_date < date_saturday)) {
-            ctx.fillRect((sche_date.getDay() + 1) * (canvas.width/9), (sche_date.getHours() + 1) * 30, (canvas.width/9), 30);
+            
+            if (x.current_task_id != null) {
+                ctx.fillRect((sche_date.getDay() + 1) * (canvas.width/9), (sche_date.getHours() + 1) * 30, (canvas.width/9), 30);
+                ctx.fillStyle = 'blue';
+                ctx.fillText(x.hour_type + " " + objects[x.current_task_id - 1].task_name, (sche_date.getDay() + 1) * (canvas.width/9), label_line_height + 30*(sche_date.getHours() + 1) - 4);
+            }
+            else {
+                ctx.fillStyle = 'blue';
+                ctx.fillText(x.hour_type, (sche_date.getDay() + 1) * (canvas.width/9), label_line_height + 30*(sche_date.getHours() + 1) - 4);
+            }
         }
     }
     
