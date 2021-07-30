@@ -1,7 +1,7 @@
 from django.test import TestCase
 # Create your tests here.
 #6:43-6:47
-from datetime import datetime, time
+from datetime import datetime, timedelta
 from django.utils import timezone
 from django.urls import reverse
 from .models import GenericTask, GenericHourBlock
@@ -11,7 +11,7 @@ def create_generic_task(deadline, hours_to_complete,
                     completed=False,scheduled=False, time_created=None, location='Default',
                     task_name='Default', task_description='Default',
                     do_after = None):
-    est_time = time(int(hours_to_complete), int((hours_to_complete % 1)*60), 0)
+    est_time = timedelta(hours=int(hours_to_complete), minutes=int((hours_to_complete % 1)*60))
     time_assigned = timezone.now() if time_created == None else time_created
     do_after = timezone.now() if do_after == None else do_after
     return GenericTask.objects.create(est_time_to_complete=est_time,
