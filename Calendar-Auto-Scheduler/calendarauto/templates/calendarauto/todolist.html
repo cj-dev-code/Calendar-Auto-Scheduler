@@ -13,7 +13,13 @@
     {% if task_list %}
         <ul> 
         {% for task in task_list %}
-            <li>[{{ task.task_name }}] {{ task.task_description }}: To do by {{ task.deadline }} and after {{ task.deadline }} . Will take {{ task.est_time_to_complete }} hours</li>
+            {% if task.scheduled %}
+                <li style="color:green">[{{ task.task_name }}] {{ task.task_description }}: To do by {{ task.deadline }} and after {{ task.deadline }} . Will take {{ task.est_time_to_complete }} hours</li>
+
+            {% else %}
+                <li style="color:red">[{{ task.task_name }}] {{ task.task_description }}: To do by {{ task.deadline }} and after {{ task.deadline }} . Will take {{ task.est_time_to_complete }} hours</li>
+
+            {% endif %}
         {% endfor %}
         </ul>
     {% else %}

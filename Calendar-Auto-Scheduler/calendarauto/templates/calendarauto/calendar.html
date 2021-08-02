@@ -20,6 +20,11 @@
             <!-- </div> -->
         </h1>
     
+        {% if messages %}
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        {% endif %}
         
         <div class="addTaskPopup">
             <div class="formPopup" id="popupForm">
@@ -85,7 +90,7 @@
                         <label for="start_hour">
                             <strong>Start Hour</strong>
                         </label>
-                        <input type="text" id="start_hour" name="start_hour" disabled>
+                        <input type="text" id="start_hour" name="start_hour" size="30" disabled>
                         <label for="end_hour">
                             <strong>End Hour</strong>
                         </label>
@@ -127,6 +132,142 @@
                 </form>
             </div>
         </div>
+        
+        <div class="infoBox">
+            <div class="formPopup" id="infobox">
+                <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="scheFormContainer">
+                    <h2>Hour Block Info</h2>
+                    <div>
+                        <label for="taskType">Task Type:</label>
+                        <select id="taskType" name="taskType" onChange="changeForm()">
+                            <option value='SF'>Social Friend</option>
+                            <option value='SR'>Social Relationship</option>
+                            <option value='SA'>Social Family</option>
+                            <option value='Tr'>Travel</option>
+                            <option value='St'>Study</option>
+                            <option value='Wk'>Work</option>
+                            <option value='Er'>Errand</option>
+                            <option value='Rd'>Read</option>
+                            <option value='Hb'>Hobby</option>
+                        </select>
+                        <label for="curTasks">Current Tasks:</label>
+                        <select id="curTasks" name="curTasks">
+                            {% if task_list %}
+                                {% for task in task_list %}
+                                    {% if not task.scheduled %}
+                                        <option>{{ task.task_name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                        <label for="start_hour">
+                            <strong>Start Hour</strong>
+                        </label>
+                        <input type="text" id="start_hour" name="start_hour" disabled>
+                        <label for="end_hour">
+                            <strong>End Hour</strong>
+                        </label>
+                        <input type="text" id="end_hour" name="end_hour" disabled>
+                        <label for="duration">
+                            <strong>Duration</strong>
+                        </label>
+                        <input type="text" value="1hr" id="duration" name="duration" disabled>
+                    </div>
+                    <input type="text" id="start_time1" name="start_time1" class="ghost">
+                    <input type="text" id="end_time1" name="end_time1" class="ghost">
+                    <input type="text" id="day_week" name="day_week" class="ghost">
+                    <input type="text" id="DAY" name="DAY" class="ghost">
+                    <div id="specForm">
+                        <label for="friends">
+                            <strong>Friend List:</strong>
+                        </label>
+                        <select id="friends" name="friends">
+                        </select>
+                        <label for="friend_desc">
+                            <strong>Description:</strong>
+                        </label>
+                        <input type="text" id="friend_desc" name="friend_desc">
+                        <label for="friend_loc">
+                            <strong>Location:</strong>
+                        </label>
+                        <input type="text" id="friend_loc" name="friend_desc">
+                    </div>
+                    <button type="submit" class="btn">Schedule</button>
+                    <button type="button" class="btn cancel" onclick="closeInfoBox()">Close</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="infoBox">
+            <div class="formPopup" id="infobox">
+                <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="scheFormContainer">
+                    <h2>Hour Block Info</h2>
+                    <div>
+                        <label for="taskType">Task Type:</label>
+                        <select id="taskType" name="taskType" onChange="changeForm()">
+                            <option value='SF'>Social Friend</option>
+                            <option value='SR'>Social Relationship</option>
+                            <option value='SA'>Social Family</option>
+                            <option value='Tr'>Travel</option>
+                            <option value='St'>Study</option>
+                            <option value='Wk'>Work</option>
+                            <option value='Er'>Errand</option>
+                            <option value='Rd'>Read</option>
+                            <option value='Hb'>Hobby</option>
+                        </select>
+                        <label for="curTasks">Current Tasks:</label>
+                        <select id="curTasks" name="curTasks">
+                            {% if task_list %}
+                                {% for task in task_list %}
+                                    {% if not task.scheduled %}
+                                        <option>{{ task.task_name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                        <label for="start_hour">
+                            <strong>Start Hour</strong>
+                        </label>
+                        <input type="text" id="start_hour" name="start_hour" disabled>
+                        <label for="end_hour">
+                            <strong>End Hour</strong>
+                        </label>
+                        <input type="text" id="end_hour" name="end_hour" disabled>
+                        <label for="duration">
+                            <strong>Duration</strong>
+                        </label>
+                        <input type="text" value="1hr" id="duration" name="duration" disabled>
+                    </div>
+                    <input type="text" id="start_time1" name="start_time1" class="ghost">
+                    <input type="text" id="end_time1" name="end_time1" class="ghost">
+                    <input type="text" id="day_week" name="day_week" class="ghost">
+                    <input type="text" id="DAY" name="DAY" class="ghost">
+                    <div id="specForm">
+                        <label for="friends">
+                            <strong>Friend List:</strong>
+                        </label>
+                        <select id="friends" name="friends">
+                        </select>
+                        <label for="friend_desc">
+                            <strong>Description:</strong>
+                        </label>
+                        <input type="text" id="friend_desc" name="friend_desc">
+                        <label for="friend_loc">
+                            <strong>Location:</strong>
+                        </label>
+                        <input type="text" id="friend_loc" name="friend_desc">
+                    </div>
+                    <button type="submit" class="btn">Schedule</button>
+                    <button type="button" class="btn cancel" onclick="closeInfoBox()">Close</button>
+                </form>
+            </div>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                {{ hour_info|json_script:'info'}}
+            {% endfor %}
+        {% endif %}
         
         <div>
             <canvas id="myCanvas" height="750" class="calendar" onClick="showDay(event)">

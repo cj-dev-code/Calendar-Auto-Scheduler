@@ -34,6 +34,7 @@
     text-align: center;
     width: 100%;
 }
+
 .schedulePopup {
     position: relative;
     text-align: center;
@@ -50,6 +51,7 @@
     z-index: 9;
 }
 
+/* Styling for the form that add tasks to the system */
 .addFormContainer {
     max-width: 500px;
     padding: 20px;
@@ -93,6 +95,8 @@
     opacity: 1;
 }
 
+/* End of styling for the form that add tasks to the system */
+
 .scheFormContainer {
     max-width: 500px;
     padding: 20px;
@@ -101,13 +105,23 @@
 
 .scheFormContainer select,
 .scheFormContainer input[type=text] {
-    width: 100%;
-    padding: 15px;
-    margin: 5px 1 5px 1;
+
+    /* refers to how much the text of input or the included items should
+    take up of the horizontal space */
+    /* width: 100%; */
+    /*padding: 15px;*/
+    /*margin: 5px 1 5px 1;*/
     border: none;
     background: #eee;
-    height: 25px;
+    /* Changes the height of the text boxes */
+    height: 20px;
+    
 }
+
+.scheFormContainer input[type=text] {
+    width: 50px;
+}
+
 
 /*.scheFormContainer input[type=text]:focus,
 .scheFormContainer input[type=datetime-local]:focus,
@@ -133,6 +147,12 @@
 .scheFormContainer .btn:hover,
 .openButton:hover {
     opacity: 1;
+}
+
+.infoBox {
+    position: relative;
+    text-align: center;
+    width: 100%;
 }
 
 .ghost {

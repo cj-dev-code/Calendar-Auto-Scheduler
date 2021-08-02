@@ -1,3 +1,11 @@
+// Create one dimensional array
+// Contains information about what info should be in this block
+var block_info = new Array(24);
+
+// Contains information about what type of block this is: 
+// empty, text, filled
+var block_types = new Array(24);
+
 function showCoords(event) {
     var x = event.clientX;
     var y = event.clientY;
@@ -87,103 +95,14 @@ function openScheduleForm() {
 
 function closeScheduleForm() {
     document.getElementById("schedulepopupForm").style.display = "none";
-    var hour_block = 0;
-    switch (document.getElementById("start_hour").value) {
-        case '12am':
-            hour_block = 1;
-            break;
-        case '1am':
-            hour_block = 2;
-            break;
-        case '2am':
-            hour_block = 3;
-            break;
-        case '3am':
-            hour_block = 4;
-            break;
-        case '4am':
-            hour_block = 5;
-            break;
-        case '5am':
-            hour_block = 6;
-            break;
-        case '6am':
-            hour_block = 7;
-            break;
-        case '7am':
-            hour_block = 8;
-            break;
-        case '8am':
-            hour_block = 9;
-            break;
-        case '9am':
-            hour_block = 10;
-            break;
-        case '10am':
-            hour_block = 11;
-            break;
-        case '11am':
-            hour_block = 12;
-            break;
-        case '12pm':
-            hour_block = 13;
-            break;
-        case '1pm':
-            hour_block = 14;
-            break;
-        case '2pm':
-            hour_block = 15;
-            break;
-        case '3pm':
-            hour_block = 16;
-            break;
-        case '4pm':
-            hour_block = 17;
-            break;
-        case '5pm':
-            hour_block = 18;
-            break;
-        case '6pm':
-            hour_block = 19;
-            break;
-        case '7pm':
-            hour_block = 20;
-            break;
-        case '8pm':
-            hour_block = 21;
-            break;
-        case '9pm':
-            hour_block = 22;
-            break;
-        case '10pm':
-            hour_block = 23;
-            break;
-        case '11pm':
-            hour_block = 24;
-            break;
-        default:
-            break;
-    }
-    // Gets the day of the month
-    var str = window.location.href;
-        
-    const myArr = str.split("/");
-        
-    var day = myArr[6];
-    var month = myArr[5];
-    var year = myArr[4];
-            
-    var new_date = new Date(year, month - 1, day);      
-        
-    var day_week = document.getElementById("day_week").value - 1;
-    console.log(day_week);
+}
 
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect((day_week + 1) * (canvas.width/9), hour_block * 30, (canvas.width/9), 30);
-    
-    drawCal(hour_block, day_week);
+function openInfoBox() {
+    document.getElementById("infobox").style.display = "block";
+}
+
+function closeInfoBox() {
+    document.getElementById("infobox").style.display = "none";
 }
 
 function changeForm() {
@@ -337,12 +256,36 @@ function getEventLocation(element,event){
     };
 }
 
+function getURLDate() {
+    // Gets the day of the month
+    var str = window.location.href;
+        
+    const myArr = str.split("/");
+        
+    var day = myArr[6];
+    var month = myArr[5];
+    var year = myArr[4];
+    
+    return {year, month, day};
+}
+
+function getTimeClicked(hour_block, day_of_week) {
+    var date = getURLDate();
+        
+    var new_date = new Date(date.year, date.month - 1, date.day, hour_block - 1);
+        
+    // getDay() gets the day of the week (0-6)
+    new_date.setDate(new_date.getDate() - (new_date.getDay() - (day_of_week - 1)));
+    
+    return new_date;
+}
 
 function showDay(event) {
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
     var eventLocation = getEventLocation(canvas, event);
 
+    // Get info based on color pixel clicked, deprecated to using arrays
     var pixelData = ctx.getImageData(eventLocation.x, eventLocation.y, 1, 1).data; 
 
     // If transparency on the pixel , array = [0,0,0,0]
@@ -354,46 +297,59 @@ function showDay(event) {
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
     
-    var hour_block = Math.floor(y / 30);
-    var day_month = Math.floor(x / (canvas.width/9));
     
-    var hex = "#" + ("000000" + rgbToHex(pixelData[0], pixelData[1], pixelData[2])).slice(-6);
-    if (hex === "#ff0000") {
-        // Gets the day of the month
-        var str = window.location.href;
-        
-        const myArr = str.split("/");
-        
-        var day = myArr[6];
-        var month = myArr[5];
-        var year = myArr[4];
-            
-        var new_date = new Date(year, month - 1, day, hour_block + 1);
-        
-        // getDay() gets the day of the week (0-6)
-        new_date.setDate(new_date.getDate() - (new_date.getDay() - (day_month - 1)));
+    
+    // Checks for clicking on the previous or next buttons
+    if ((y < 30) && (x < Math.floor(canvas.width/9))) {
+        window.location.replace(getFrontUrl(true, false));
+        return;  
+    }
+    else if ((y < 30) && (x > canvas.width - Math.floor(canvas.width/9))) {
+        window.location.replace(getFrontUrl(true, true));  
+        return;
+    }
+    
+    var hour_block = Math.floor(y / 30);
+    var day_of_week = Math.floor(x / (canvas.width/9));
+    
+    if ((hour_block == 0) || (day_of_week == 0) || (day_of_week == 8))
+        return;
+    
+    
+    //var hex = "#" + ("000000" + rgbToHex(pixelData[0], pixelData[1], pixelData[2])).slice(-6);
+    if (block_types[hour_block - 1][day_of_week - 1] == "filled") {
+        var new_date = getTimeClicked(hour_block, day_of_week);
         
         const objects = JSON.parse(document.getElementById('blocks').textContent);
         
-        
-        
         for (x of objects) {
             var sche_date = new Date(x.datetime);
-            console.log(sche_date);
-            console.log(new_date);
+            // Have to set the hour back by one because the timezone of the back-end is in Chicago Time (Central Time)
+            sche_date.setHours(sche_date.getHours() - 1);
+
             if ((sche_date.getFullYear() == new_date.getFullYear()) && (sche_date.getMonth() == new_date.getMonth()) && (sche_date.getDate() == new_date.getDate()) && (sche_date.getHours() == new_date.getHours())) {
-                console.log("HIT")
+                openInfoBox();
             }
         }
         
     }
+    else if (block_types[hour_block - 1][day_of_week - 1] == "text") {
+        var new_date = getTimeClicked(hour_block, day_of_week);
+        
+        const objects = JSON.parse(document.getElementById('blocks').textContent);
+        
+        for (x of objects) {
+            var sche_date = new Date(x.datetime);
+            // Have to set the hour back by one because the timezone of the back-end is in Chicago Time (Central Time)
+            sche_date.setHours(sche_date.getHours() - 1);
+
+            if ((sche_date.getFullYear() == new_date.getFullYear()) && (sche_date.getMonth() == new_date.getMonth()) && (sche_date.getDate() == new_date.getDate()) && (sche_date.getHours() == new_date.getHours())) {
+                openInfoBox();
+            }
+        }
+    }
+    // i.e. when the cell is undefined
     else {
-        if ((y < 30) && (x < Math.floor(canvas.width/9))) {
-            window.location.replace(getFrontUrl(true, false));  
-        }
-        else if ((y < 30) && (x > canvas.width - Math.floor(canvas.width/9))) {
-            window.location.replace(getFrontUrl(true, true));  
-        }
         switch (hour_block) {
             case 1:
                 document.getElementById("start_hour").value = "12am";
@@ -542,33 +498,24 @@ function showDay(event) {
             default:
                 break;
         }
+
         
-        if ((y > 30) && ((x > Math.floor(canvas.width/9)) && (x < (canvas.width - Math.floor(canvas.width/9)))))
-            openScheduleForm();
-            
-        if ((hour_block > 0) && ((0 < day_month) && (day_month < 8))) {
-            ctx.fillStyle = "#FF0000";
-            ctx.fillRect(day_month * (canvas.width/9), hour_block * 30, (canvas.width/9), 30);
-        }
             
         // Gets the day of the month
-        var str = window.location.href;
-        
-        const myArr = str.split("/");
-        
-        var day = myArr[6];
-        var month = myArr[5];
-        var year = myArr[4];
+        var date = getURLDate();
             
-        var new_date = new Date(year, month - 1, day);
+        var new_date = new Date(date.year, date.month - 1, date.day);
         
         // getDay() gets the day of the week (0-6)
-        new_date.setDate(new_date.getDate() - (new_date.getDay() - (day_month - 1)));
+        new_date.setDate(new_date.getDate() - (new_date.getDay() - (day_of_week - 1)));
         document.getElementById("DAY").value = new_date.getDate();
-        document.getElementById("day_week").value = day_month;
+        document.getElementById("day_week").value = day_of_week;
+        
+        openScheduleForm();
     }
 }
 
+// Not used
 function drawCal(hour_block, day_week) {
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
@@ -592,6 +539,15 @@ function drawCal(hour_block, day_week) {
 // Wait for page to load
 // Contains the eventListener for most elements
 document.addEventListener('DOMContentLoaded', function() {
+    // Clears the info in the global arrays
+    block_info = new Array(24);
+    block_types = new Array(24);
+    // Fills the cells with the value of undefined
+    for (var i = 0; i < block_info.length; i++) {
+        block_info[i] = new Array(7);
+        block_types[i] = new Array(7);
+    }
+    
     // Creates the horizontal lines in the canvas
     var canvas = document.getElementById("myCanvas");
     
@@ -605,10 +561,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var date_saturday = new Date(saturday);
     date_saturday.setDate(date_saturday.getDate() + 1);
     
+    
     // Only has the string version
     const hour_info = JSON.parse(document.getElementById('info').textContent);
     
-    
+    // Drawing on the canvas
     canvas.width = window.screen.width - 130;
     var ctx = canvas.getContext("2d");
 
@@ -621,12 +578,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Adds the top labels to the calendar
-    const week_day_labels = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const week_day_labels = ["Sun","Mon","Tues","Wed","Thurs","Fri","Sat"];
     var label_line_height = 30;
     ctx.font = "25px Arial";
     ctx.strokeText("<- Previous", 0, label_line_height - 5);
+    var temp_date = new Date(date_sunday);
     for (let i = 1; i <= week_day_labels.length; i++) {
-        ctx.strokeText(week_day_labels[i-1], (canvas.width/9)*i, label_line_height - 5);
+        ctx.strokeText(week_day_labels[i-1] + "(" + temp_date.getDate() + ")", (canvas.width/9)*i, label_line_height - 5);
+        temp_date.setDate(temp_date.getDate() + 1);
     }
     ctx.strokeText("Next ->", (canvas.width/9)*8, label_line_height - 5);
     
@@ -656,25 +615,28 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.strokeText((i % 12) + " pm-" + ((i % 12) + 1) + " pm", 0, label_line_height + 30*(i + 1) - 4);
         }
     }
-    
+    // End of drawing on the canvas
     for (x of objects2) {
         var sche_date = new Date(x.datetime);
+        // Have to set the hour back by one because the timezone of the back-end is in Chicago Time (Central Time)
         sche_date.setHours(sche_date.getHours() - 1);
         x.datetime = sche_date;
         ctx.fillStyle = "#FF0000";
         if ((sche_date > date_sunday) && (sche_date < date_saturday)) {
-            
+            block_info[sche_date.getHours()][sche_date.getDay()] = x;
             if (x.current_task_id != null) {
+                block_types[sche_date.getHours()][sche_date.getDay()] = 'filled';
                 ctx.fillRect((sche_date.getDay() + 1) * (canvas.width/9), (sche_date.getHours() + 1) * 30, (canvas.width/9), 30);
-                ctx.fillStyle = 'blue';
+                ctx.fillStyle = 'black';
                 ctx.fillText(x.hour_type + " " + objects[x.current_task_id - 1].task_name, (sche_date.getDay() + 1) * (canvas.width/9), label_line_height + 30*(sche_date.getHours() + 1) - 4);
             }
             else {
-                ctx.fillStyle = 'blue';
+                block_types[sche_date.getHours()][sche_date.getDay()] = 'text';
+                ctx.fillStyle = 'black';
                 ctx.fillText(x.hour_type, (sche_date.getDay() + 1) * (canvas.width/9), label_line_height + 30*(sche_date.getHours() + 1) - 4);
             }
         }
     }
-    
+    console.table(block_info);
     
 });

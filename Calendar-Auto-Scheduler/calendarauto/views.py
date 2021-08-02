@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from django.core import serializers
+from django.contrib import messages
 #from datetime import datetime, time
 import datetime
 
@@ -31,16 +32,15 @@ def CalendarView(request, year, month, day):
     idx = (today.weekday() + 1) % 7
     sun = today - datetime.timedelta(idx)
     sat = today + datetime.timedelta(6 - idx)
-<<<<<<< HEAD
+
     
     data = serializers.serialize("json", GenericHourBlock.objects.all())
     
-    if (list(GenericTask.objects.values())):
-        print(list(GenericTask.objects.values()))
-    
-=======
-        
->>>>>>> def4e5e8b32cde43c3932f6ba2da249498ee6999
+    #if (list(GenericTask.objects.values())):
+    #    print(list(GenericTask.objects.values()))
+    # Function ifInvalidInfo
+    # Call the functionsend_user_invalid_input
+
     return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 
                                                           'saturday' : sat, 
                                                           'task_list' : list(GenericTask.objects.values()),
@@ -96,6 +96,7 @@ def add_new_task(request,year, month, day):
     # make sure the user didn't put an illegal time in.
     if datetime.timedelta(hours=task_duration // 1, minutes=int((task_duration % 1)*60))+ do_after > deadline:
         print('invalid.')
+        
         return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
     print('attempted to save task')
     for i in range(0, int(task_duration) + 1):
@@ -135,3 +136,16 @@ def schedule_hour_block(request, year, month, day):
         print('second call', newBlock)
     newBlock.populate()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+
+class UserAlerts:
+    def send_user_invalid_input(input_string, request, year, month, day):
+        messages.add_message(request, messages.INFO, input_string)
+        return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+    
+    def send_alert(alert_string, request, year, month, day):
+        messages.add_message(request, messages.INFO, alert_string)
+        return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+    
+    def alert_ask_for_permission(alert, options, request, year, month, day):
+        messages.add_message(request, messages.INFO, alert, extra_tags='options')
+        return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day), kwargs={'options': 'options'}))
