@@ -74,16 +74,39 @@ class GenericHourBlock(models.Model):
         if len(refined_options):
             self.current_task = refined_options.earliest()
             self.current_task.scheduled = True
+            self.isFilled=True
             self.current_task.save()
         if self.get_current_task() == None:
             for i in options:
                 if i.do_after == None or i.deadline == None:
                     self.current_task = i
                     self.current_task.scheduled = True
+                    self.isFilled=True
                     self.current_task.save()
                     break
-                
         self.save()
+        
+    '''
+    returns true for successful scheduling
+    reutrns false for unsuccessful scheduling
+    '''
+    def schedule(self, specific_task):
+        # If the task fits in the hour, schedule it! Return true for succeeded
+        if (specific_task.do_after <= self.datetime  + timedelta(hours=1)) and (self.datetime <= specific_task.get_starting_deadline()) and not specific_task.scheduled:
+            self.current_task = specific_task
+            self.current_task.scheduled = True
+            self.isFilled = True
+            self.current_task.save()
+            self.save()
+            return True
+        else:
+            return False
+    def unschedule(self):
+        self.isFilled = False
+        a = self.get_current_task()
+        if a != None:
+            a.scheduled = False
+        return a
         
     def get_current_task(self):
         if hasattr(self, 'current_task'):
