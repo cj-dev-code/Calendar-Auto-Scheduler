@@ -31,16 +31,9 @@ def CalendarView(request, year, month, day):
     idx = (today.weekday() + 1) % 7
     sun = today - datetime.timedelta(idx)
     sat = today + datetime.timedelta(6 - idx)
-<<<<<<< HEAD
     
     data = serializers.serialize("json", GenericHourBlock.objects.all())
     
-    if (list(GenericTask.objects.values())):
-        print(list(GenericTask.objects.values()))
-    
-=======
-        
->>>>>>> def4e5e8b32cde43c3932f6ba2da249498ee6999
     return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 
                                                           'saturday' : sat, 
                                                           'task_list' : list(GenericTask.objects.values()),
@@ -82,11 +75,10 @@ def get_datetime_from_post(post_string):
     day = int(post_string[8:10])
     hr = int(post_string[11:13])
     minute = int(post_string[14:16])
-    return datetime.datetime(year=year, month=month, day=day, hour=hr, minute=minute)
+    return timezone.make_aware(datetime.datetime(year=year, month=month, day=day, hour=hr, minute=minute))
 
 def add_new_task(request,year, month, day):
-    print(sys._getframe().f_code.co_name)
-    
+    print(sys._getframe().f_code.co_name)    
     # Upgrade add_new_task it makes the ceil of duration number of tasks 
     # So that tasks are at most an hour long.
     # Always get the time from the datetime function for the deadline
@@ -98,12 +90,60 @@ def add_new_task(request,year, month, day):
         print('invalid.')
         return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
     print('attempted to save task')
+    tasks = []
     for i in range(0, int(task_duration) + 1):
         print('saving task')
         task = create_generic_task(deadline, 1 if i < int(task_duration) else task_duration % 1, do_after=do_after,
                         task_name = request.POST['task_name'] + ('(' + str(i + 1) + '/' + str(int(task_duration) + 1) + ')' if task_duration > 1 else ''),
                         task_description=request.POST['task_desc'])
         task.save()
+        tasks.append(task)
+    current_datetime = timezone.make_aware(datetime.datetime.now())
+    to_schedule = GenericHourBlock.objects.filter(datetime__gte = current_datetime, isFilled = False)
+    
+    # Schedule a task. 
+    # If the task 
+    for i in to_schedule: # Should probably automatically spread the task out
+                            # across available days... TODO
+                            # First, fix the deadline issue.
+        i.populate()
+        print(i)
+        
+    # Issue: If all the blocks between the current moment and the deadline of a new task
+    # are filled, we can't effectively schedule the task.
+    # If there are currently scheduled tasks that have deadline after this tasks',
+    # unschedule them and reschedule them to a later time.
+    
+    # all of the tasks have the same deadline.
+    deadline = tasks[0].deadline
+    # Get all the hour blocks between the present moment and the task deadline.
+    # (Reschedule as far out as possible so that we have enough time to complete)
+    # only reschedule blocks that have a task with a deadline after
+    # The new task's deadline
+    hour_blocks = list(GenericHourBlock.objects.filter(datetime__gte = current_datetime, datetime__lt = deadline, current_task__deadline__gt = deadline).order_by('-datetime'))
+    now_unscheduled_tasks = [] # The tasks we unscheduled from hour blocks to make room for the new tasks
+    # Reverse order so we do first parts first and last parts last.
+    j = len(hour_blocks)-1
+    for task in tasks[::-1]:
+        if j == -1:
+            UserAlerts.send_alert("You are overbooked until " + str(deadline) + ". You need to add more task slots before this time.") # Future version, specify the task type too
+            break
+        # If the task is currently not scheduled, 
+        if not task.scheduled:
+            # Reschedule the last block we can to this task, and we will reschedule
+            # impacted task later.
+            unscheduled_task = hour_blocks[j].unschedule()
+            now_unscheduled_tasks.append(unscheduled_task)
+            hour_blocks[j].schedule(task)
+            UserAlerts.send_alert("Rescheduled" + str(unscheduled_task.task_name))
+            j -= 1
+    # Reschedule any tasks that got moved around due to the deadline conflict
+    hour_blocks = list(GenericHourBlock.objects.filter(datetime__gte = deadline, isFilled = False))
+    for task in now_unscheduled_tasks:
+        for block in hour_blocks:
+            if block.schedule(task):
+                break
+        UserAlerts.send_alert('We rescheduled ' + str(task.task_name) + ", but there isn't enough room to fit its deadline. Add room that fits this task!")
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
 def schedule_hour_block(request, year, month, day): 
@@ -135,3 +175,12 @@ def schedule_hour_block(request, year, month, day):
         print('second call', newBlock)
     newBlock.populate()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+
+
+class UserAlerts:
+    def send_user_invalid_input(input_string):
+        pass
+    def send_alert(alert_string):
+        pass
+    def alert_ask_for_permission(alert, options):
+        pass
