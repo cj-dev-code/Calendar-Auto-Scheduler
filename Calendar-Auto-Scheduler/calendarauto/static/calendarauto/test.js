@@ -321,7 +321,12 @@ function showBlock(event) {
                 else {
                     document.getElementById('sche_end_hour').innerHTML += "pm";
                 }
-                document.getElementById('sche_duration').innerHTML = "<strong>Start Hour:</strong> 1hr";
+                document.getElementById('scheduled_duration').innerHTML = "<strong>Duration:</strong> 1hr";
+   
+                var deadline = new Date(tasks[x.current_task_id - 1].deadline);
+
+                document.getElementById('sche_deadline').innerHTML = "<strong>Deadline:</strong> " + deadline;
+                document.getElementById("scheSpecForm").innerHTML = '';
                 switch (x.hour_type) {
                     case 'SF':
                         var friend_list_label = document.createElement("label");
