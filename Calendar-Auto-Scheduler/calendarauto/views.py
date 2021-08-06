@@ -55,7 +55,6 @@ class TodoView(generic.ListView):
         """Return the last five published questions."""
         return GenericTask.objects.order_by('-deadline')
 
-    
 def MysteryView(request):
     return render(request, 'calendarauto/calendar.html')
     
@@ -83,6 +82,73 @@ def get_datetime_from_post(post_string):
     hr = int(post_string[11:13])
     minute = int(post_string[14:16])
     return timezone.make_aware(datetime.datetime(year=year, month=month, day=day, hour=hr, minute=minute))
+
+# Repeat this function until the returned unscheduled task list
+# equals the previous returned unscheduled task list.
+def schedule_new_task(task):
+    # First, try to fit the task in any of the existing hourblocks before the 
+    # deadline of this task. return True if this works.
+    hourblocks_before_deadline = GenericHourBlock.objects.filter(datetime_gte = timezone.make_aware(datetime.now()), datetime__lt = task.deadline)
+    for block in hourblocks_before_deadline:
+        block.schedule(task)
+        if task.scheduled:
+            return True
+    
+    # We know there wasn't enough space before the task deadline now
+    # for this task. get all the hourblocks after the task deadline.
+    # We will try to RESCHEDULE SCHEDULED TASKS to these blocks now.
+    hourblocks_after_deadline = list(GenericHourBlock.objects.filter(datetime_gte = task.deadline,
+                                                                     isFilled=False))
+    
+    # For each hourblock before the deadline of the task (in reverse
+    # order), find out of it can be scheduled in any of the blocks remaining
+    # in the unscheduled list. Reschedule it as far out as possible
+    # to make more reschedulings possible.
+    
+    for block in hourblocks_before_deadline[::-1]:
+        j = len(hourblocks_after_deadline) - 1
+        while j >= 0:
+            if hourblocks_after_deadline[j].schedule(block.current_task):
+                block.unschedule()
+                block.schedule(task)
+                return True        
+            j -= 1
+    
+    # If none of the blocks could get rescheduled to later,
+    # But one can be done later, unschedule the block with the furthest
+    # out deadline, replace that with the task, and return the now 
+    # unscheduled 
+    hourblock_furthest_deadline = list(GenericHourBlock.objects.filter(
+        datetime_gte = timezone.make_aware(datetime.now()), 
+        datetime__lt = task.deadline).order_by('current_task__deadline'))[-1]
+    if hourblock_furthest_deadline.current_task.deadline > task.deadline:
+        furthest_out_deadline_task = hourblock_furthest_deadline.unschedule()
+        if hourblock_furthest_deadline.schedule(task):
+            return furthest_out_deadline_task
+    
+    # return all remaining unscheduled tasks.
+    # Function breakpoint analysis:
+        #   There is an opening before the task deadline
+        #   And after the hourblock do_after:
+        #       Expected: Schedules the given task. No rescheduling.
+        #   There are no openings after the task deadline.
+        #       Expected: No reschedulings occur. Task is returned.
+        #   There are openings after the task deadline, but no openings
+        #   before the task deadline
+        #       Expected: System attempts to reschedule 1 hourblock before
+        #       task deadline to an hourblock after the task deadline.
+        #       Returns nothing.
+        #   There are no openings before the task deadline and no openings
+        #   after the task deadline, but one task before task deadline
+        #   Can be done later.:
+        #       Expected: System unschedules the latest task that can be 
+        #       Done later, schedules the current task for the now open
+        #       hour block, and returns the now unscheduled task.
+        #   There are no openings before the task deadline, no openings
+        #   After the task deadline, and no tasks that have deadlines
+        #   after the task deadline.
+        #       Expected: Just returns the task we tried to schedule.
+    return task
 
 def add_new_task(request,year, month, day):
     print(sys._getframe().f_code.co_name)    
@@ -184,7 +250,6 @@ def schedule_hour_block(request, year, month, day):
         print('second call', newBlock)
     newBlock.populate()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
-
 
 class UserAlerts:
     def send_user_invalid_input(input_string, request, year, month, day):
