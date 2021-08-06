@@ -1,7 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 
-<html onClick="showCoords(event)">
+<html onClick="clickedPage(event)">
     <!-- Does load it is the name in the tab -->
     <head>
         <meta charset="utf-8">
@@ -19,12 +19,6 @@
                 <button class="openButton" onclick="openForm()"><strong>Create New Task</strong></button>
             <!-- </div> -->
         </h1>
-    
-        {% if messages %}
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        {% endif %}
         
         <div class="addTaskPopup">
             <div class="formPopup" id="popupForm">
@@ -65,7 +59,9 @@
                 {% csrf_token %}
                     <h2>Schedule New Task</h2>
                     <div>
-                        <label for="taskType">Task Type:</label>
+                        <label for="taskType">
+                            <strong>Task Type:</strong>
+                        </label>
                         <select id="taskType" name="taskType" onChange="changeForm()">
                             <option value='SF'>Social Friend</option>
                             <option value='SR'>Social Relationship</option>
@@ -77,7 +73,9 @@
                             <option value='Rd'>Read</option>
                             <option value='Hb'>Hobby</option>
                         </select>
-                        <label for="curTasks">Current Tasks:</label>
+                        <label for="curTasks">
+                            <strong>Current Tasks:</strong>
+                        </label>
                         <select id="curTasks" name="curTasks">
                             {% if task_list %}
                                 {% for task in task_list %}
@@ -87,6 +85,7 @@
                                 {% endfor %}
                             {% endif %}
                         </select>
+                        <br>
                         <label for="start_hour">
                             <strong>Start Hour</strong>
                         </label>
@@ -95,10 +94,11 @@
                             <strong>End Hour</strong>
                         </label>
                         <input type="text" id="end_hour" name="end_hour" disabled>
-                        <label for="duration">
+                        <label for="sche_duration">
                             <strong>Duration</strong>
                         </label>
-                        <input type="text" value="1hr" id="duration" name="duration" disabled>
+                        <input type="text" value="1hr" id="sche_duration" name="sche_duration" disabled>
+                        <br>
                         <input type="checkbox" id="autofill" name="autofill">
                         <label for="autofill">
                             <strong>Autofill</strong>
@@ -134,77 +134,47 @@
         </div>
         
         <div class="infoBox">
-            <div class="formPopup" id="infobox">
+            <div class="formPopup" id="sche_infobox">
                 <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="scheFormContainer">
                     <h2>Hour Block Info</h2>
                     <div>
-                        <label for="taskType">Task Type:</label>
-                        <select id="taskType" name="taskType" onChange="changeForm()">
-                            <option value='SF'>Social Friend</option>
-                            <option value='SR'>Social Relationship</option>
-                            <option value='SA'>Social Family</option>
-                            <option value='Tr'>Travel</option>
-                            <option value='St'>Study</option>
-                            <option value='Wk'>Work</option>
-                            <option value='Er'>Errand</option>
-                            <option value='Rd'>Read</option>
-                            <option value='Hb'>Hobby</option>
-                        </select>
-                        <label for="curTasks">Current Tasks:</label>
-                        <select id="curTasks" name="curTasks">
-                            {% if task_list %}
-                                {% for task in task_list %}
-                                    {% if not task.scheduled %}
-                                        <option>{{ task.task_name }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </select>
-                        <label for="start_hour">
-                            <strong>Start Hour</strong>
+                        <label id="scheTaskName">
+                            
                         </label>
-                        <input type="text" id="start_hour" name="start_hour" disabled>
-                        <label for="end_hour">
-                            <strong>End Hour</strong>
+                        <label id="scheTaskType">
+                            
                         </label>
-                        <input type="text" id="end_hour" name="end_hour" disabled>
-                        <label for="duration">
-                            <strong>Duration</strong>
+                        <br>
+                        <label id="scheTaskDesc">
+                            
                         </label>
-                        <input type="text" value="1hr" id="duration" name="duration" disabled>
+                        <br>
+                        <label id="sche_start_hour">
+                            
+                        </label>
+                        <label id="sche_end_hour">
+                        
+                        </label>
+                        <br>
+                        <label id="scheduled_duration">
+                        
+                        </label>
                     </div>
-                    <input type="text" id="start_time1" name="start_time1" class="ghost">
-                    <input type="text" id="end_time1" name="end_time1" class="ghost">
-                    <input type="text" id="day_week" name="day_week" class="ghost">
-                    <input type="text" id="DAY" name="DAY" class="ghost">
-                    <div id="specForm">
-                        <label for="friends">
-                            <strong>Friend List:</strong>
-                        </label>
-                        <select id="friends" name="friends">
-                        </select>
-                        <label for="friend_desc">
-                            <strong>Description:</strong>
-                        </label>
-                        <input type="text" id="friend_desc" name="friend_desc">
-                        <label for="friend_loc">
-                            <strong>Location:</strong>
-                        </label>
-                        <input type="text" id="friend_loc" name="friend_desc">
+                    <div id="scheSpecForm">
                     </div>
-                    <button type="submit" class="btn">Schedule</button>
-                    <button type="button" class="btn cancel" onclick="closeInfoBox()">Close</button>
+                    <button type="submit" class="btn">Unschedule</button>
+                    <button type="button" class="btn cancel" onclick="closeScheInfoBox()">Close</button>
                 </form>
             </div>
         </div>
         
         <div class="infoBox">
-            <div class="formPopup" id="infobox">
+            <div class="formPopup" id="not_sche_infobox">
                 <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="scheFormContainer">
                     <h2>Hour Block Info</h2>
                     <div>
-                        <label for="taskType">Task Type:</label>
-                        <select id="taskType" name="taskType" onChange="changeForm()">
+                        <label for="notScheTaskType">Task Type:</label>
+                        <select id="notScheTaskType" name="notScheTaskType">
                             <option value='SF'>Social Friend</option>
                             <option value='SR'>Social Relationship</option>
                             <option value='SA'>Social Family</option>
@@ -215,62 +185,24 @@
                             <option value='Rd'>Read</option>
                             <option value='Hb'>Hobby</option>
                         </select>
-                        <label for="curTasks">Current Tasks:</label>
-                        <select id="curTasks" name="curTasks">
-                            {% if task_list %}
-                                {% for task in task_list %}
-                                    {% if not task.scheduled %}
-                                        <option>{{ task.task_name }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </select>
-                        <label for="start_hour">
-                            <strong>Start Hour</strong>
-                        </label>
-                        <input type="text" id="start_hour" name="start_hour" disabled>
-                        <label for="end_hour">
-                            <strong>End Hour</strong>
-                        </label>
-                        <input type="text" id="end_hour" name="end_hour" disabled>
-                        <label for="duration">
-                            <strong>Duration</strong>
-                        </label>
-                        <input type="text" value="1hr" id="duration" name="duration" disabled>
                     </div>
-                    <input type="text" id="start_time1" name="start_time1" class="ghost">
-                    <input type="text" id="end_time1" name="end_time1" class="ghost">
-                    <input type="text" id="day_week" name="day_week" class="ghost">
-                    <input type="text" id="DAY" name="DAY" class="ghost">
-                    <div id="specForm">
-                        <label for="friends">
-                            <strong>Friend List:</strong>
-                        </label>
-                        <select id="friends" name="friends">
-                        </select>
-                        <label for="friend_desc">
-                            <strong>Description:</strong>
-                        </label>
-                        <input type="text" id="friend_desc" name="friend_desc">
-                        <label for="friend_loc">
-                            <strong>Location:</strong>
-                        </label>
-                        <input type="text" id="friend_loc" name="friend_desc">
-                    </div>
-                    <button type="submit" class="btn">Schedule</button>
-                    <button type="button" class="btn cancel" onclick="closeInfoBox()">Close</button>
+                    <br>
+                    <button type="submit" class="btn">Change Hour Type</button>
+                    <button type="button" class="btn cancel" onclick="closeNotScheInfoBox()">Close</button>
                 </form>
             </div>
         </div>
         
         {% if messages %}
+        <ul class="messages">
             {% for message in messages %}
-                {{ hour_info|json_script:'info'}}
+                <li id="message{{ forloop.counter}}" class="ghost">{{ message }}</li>
             {% endfor %}
+        </ul>
         {% endif %}
         
-        <div>
-            <canvas id="myCanvas" height="750" class="calendar" onClick="showDay(event)">
+        <div id="canvas_div">
+            <canvas id="myCanvas" height="750" class="calendar" onClick="showBlock(event)">
                 Your browser does not support the canvas element.
             </canvas>
             <!-- 
@@ -278,6 +210,10 @@
             <button id="button" class="calBtn">Whats up</button> 
             <button id="button" class="calBtn">Whats up</button> 
             -->
+            <div id="test_id" class="sys_messages">
+                <ul id="message_list" class="message_list">
+                </ul>
+            </div>
         </div>
         
         <p id="demo"></p>
@@ -289,4 +225,5 @@
 {{ task_list|json_script:'tasks'}}
 {{ hour_blocks|json_script:'blocks'}}
 {{ hour_info|json_script:'info'}}
+{{ options|json_script:'options'}}
 </html>

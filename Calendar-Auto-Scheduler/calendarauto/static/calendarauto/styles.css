@@ -6,6 +6,18 @@
     position: relative;
     left: 40px;
     border: 1px solid #c3c3c3;
+
+}
+
+.sys_messages {
+    position: absolute;
+    top: 121px;
+}
+
+.message_list {
+    position: relative;
+    top: -10px;
+    left: -15px;
 }
 
 .calBtn {
@@ -110,7 +122,7 @@
     take up of the horizontal space */
     /* width: 100%; */
     /*padding: 15px;*/
-    /*margin: 5px 1 5px 1;*/
+    margin: 5px;
     border: none;
     background: #eee;
     /* Changes the height of the text boxes */
@@ -118,9 +130,11 @@
     
 }
 
-.scheFormContainer input[type=text] {
+
+
+/*.scheFormContainer input[type=text] {
     width: 50px;
-}
+}*/
 
 
 /*.scheFormContainer input[type=text]:focus,

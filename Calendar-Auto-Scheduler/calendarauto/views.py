@@ -32,7 +32,6 @@ def CalendarView(request, year, month, day):
     idx = (today.weekday() + 1) % 7
     sun = today - datetime.timedelta(idx)
     sat = today + datetime.timedelta(6 - idx)
-
     
     data = serializers.serialize("json", GenericHourBlock.objects.all())
     
@@ -40,7 +39,6 @@ def CalendarView(request, year, month, day):
     #    print(list(GenericTask.objects.values()))
     # Function ifInvalidInfo
     # Call the functionsend_user_invalid_input
-
     
     return render(request, 'calendarauto/calendar.html', {'sunday' : sun, 
                                                           'saturday' : sat, 
@@ -48,6 +46,7 @@ def CalendarView(request, year, month, day):
                                                           'hour_blocks' : list(GenericHourBlock.objects.values()),
                                                           'hour_info' : data,
                                                           })
+
     
 class TodoView(generic.ListView):
     template_name = 'calendarauto/todolist.html'
@@ -135,7 +134,7 @@ def add_new_task(request,year, month, day):
     j = len(hour_blocks)-1
     for task in tasks[::-1]:
         if j == -1:
-            UserAlerts.send_alert("You are overbooked until " + str(deadline) + ". You need to add more task slots before this time.") # Future version, specify the task type too
+            UserAlerts.send_alert("You are overbooked until " + str(deadline) + ". You need to add more task slots before this time.", request, year, month, day) # Future version, specify the task type too
             break
         # If the task is currently not scheduled, 
         if not task.scheduled:
@@ -154,6 +153,7 @@ def add_new_task(request,year, month, day):
                 break
         UserAlerts.send_alert('We rescheduled ' + str(task.task_name) + ", but there isn't enough room to fit its deadline. Add room that fits this task!")
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+
 
 def schedule_hour_block(request, year, month, day): 
     print(sys._getframe().f_code.co_name)
@@ -189,11 +189,15 @@ def schedule_hour_block(request, year, month, day):
 class UserAlerts:
     def send_user_invalid_input(input_string, request, year, month, day):
         messages.add_message(request, messages.INFO, input_string)
+        
         return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+
     
     def send_alert(alert_string, request, year, month, day):
         messages.add_message(request, messages.INFO, alert_string)
-        return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+        messages.add_message(request, messages.INFO, 'second message')
+        
+        #return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
     
     def alert_ask_for_permission(alert, options, request, year, month, day):
         messages.add_message(request, messages.INFO, alert, extra_tags='options')
