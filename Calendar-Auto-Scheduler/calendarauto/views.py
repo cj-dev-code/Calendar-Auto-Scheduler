@@ -251,6 +251,13 @@ def schedule_hour_block(request, year, month, day):
     newBlock.populate()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
+# Function for unscheduling a task that is currently attached to the GenericHourBlock
+# input (request, year, month, day, GenericHourBlock object/index)
+
+# Function for changing the hour block type of a GenericHourBlock object
+# input (request, year, month, day, GenericHourBlock object/index)
+
+
 class UserAlerts:
     def send_user_invalid_input(input_string, request, year, month, day):
         messages.add_message(request, messages.INFO, input_string)

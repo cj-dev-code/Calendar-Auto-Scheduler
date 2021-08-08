@@ -169,6 +169,36 @@
     width: 100%;
 }
 
+.infoBoxContainer {
+    max-width: 500px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.infoBoxContainer label {
+    margin: 5px;
+}
+
+.infoBoxContainer .btn {
+    padding: 12px 20px;
+    border: none;
+    background-color: #8ebf42;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.infoBoxContainer .cancel {
+    background-color: #cc0000;
+}
+.infoBoxContainer .btn:hover,
+.openButton:hover {
+    opacity: 1;
+}
+
+
 .ghost {
     /* Hides the element and also doesn't make it so
     the shape of the other elements aren't chnaged */

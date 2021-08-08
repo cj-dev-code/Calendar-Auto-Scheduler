@@ -321,11 +321,29 @@ function showBlock(event) {
                 else {
                     document.getElementById('sche_end_hour').innerHTML += "pm";
                 }
-                document.getElementById('scheduled_duration').innerHTML = "<strong>Duration:</strong> 1hr";
+                document.getElementById('scheduled_duration').innerHTML = "<strong>Duration:</strong> 1 hour";
    
                 var deadline = new Date(tasks[x.current_task_id - 1].deadline);
 
-                document.getElementById('sche_deadline').innerHTML = "<strong>Deadline:</strong> " + deadline;
+                document.getElementById('sche_deadline').innerHTML = "<strong>Deadline:</strong> " + deadline.toLocaleString('default', { month: 'long' })
+                                                                        + " " + deadline.getDate() + ", " + deadline.getFullYear() + " "
+                                                                        + " @ ";
+                if (deadline.getHours() == 0) {
+                    document.getElementById('sche_deadline').innerHTML += "12 am";
+                }
+                else if (deadline.getHours() == 12) {
+                    document.getElementById('sche_deadline').innerHTML += "12 pm";
+                }
+                else {
+                    document.getElementById('sche_deadline').innerHTML += deadline.getHours() % 12;
+                    if (deadline.getHours() < 13) {
+                        document.getElementById('sche_deadline').innerHTML += " am";
+                    }
+                    else {
+                        document.getElementById('sche_deadline').innerHTML += " pm";
+                    }
+                }
+                
                 document.getElementById("scheSpecForm").innerHTML = '';
                 switch (x.hour_type) {
                     case 'SF':

@@ -135,7 +135,8 @@
         
         <div class="infoBox">
             <div class="formPopup" id="sche_infobox">
-                <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="scheFormContainer">
+                <!-- Function should be changed to unschedule the current task that is attached to the GenericHourBlock -->
+                <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="infoBoxContainer">
                     <h2>Hour Block Info</h2>
                     <div>
                         <label id="scheTaskName">
@@ -174,6 +175,8 @@
         
         <div class="infoBox">
             <div class="formPopup" id="not_sche_infobox">
+                <!-- Function should be changed to have the GenericHourBlock be chnaged to whatever hour block that it was
+                changed to -->
                 <form action="{% url 'calendarauto:schedule_hour_block' sunday|date:"Y" sunday|date:"m" sunday|date:"d" %}" id="scheForm" method=post class="scheFormContainer">
                     <h2>Hour Block Info</h2>
                     <div>
