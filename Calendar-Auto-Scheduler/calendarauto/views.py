@@ -14,7 +14,6 @@ import datetime
 from .models import GenericTask, GenericHourBlock
 import sys
 
-
 # If the url is going to use varibles, then they must be listed here
 # in the function name if it is a custom view i.e. what we have here
 def CalendarView(request, year, month, day):
@@ -23,7 +22,7 @@ def CalendarView(request, year, month, day):
         datetime.datetime(year, month, day)
     except:
         isValidDate = False
-        
+
     if (isValidDate):
         today = datetime.datetime(year, month, day)
     else:
@@ -161,7 +160,6 @@ def add_new_task(request,year, month, day):
     # make sure the user didn't put an illegal time in.
     if datetime.timedelta(hours=task_duration // 1, minutes=int((task_duration % 1)*60))+ do_after > deadline:
         print('invalid.')
-        
         return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
     print('attempted to save task')
     tasks = []
@@ -182,7 +180,7 @@ def add_new_task(request,year, month, day):
                             # First, fix the deadline issue.
         i.populate()
         print(i)
-        
+    
     # Issue: If all the blocks between the current moment and the deadline of a new task
     # are filled, we can't effectively schedule the task.
     # If there are currently scheduled tasks that have deadline after this tasks',
@@ -246,7 +244,6 @@ def schedule_hour_block(request, year, month, day):
     print(newBlock)
     if type(newBlock) == type(None):
         newBlock = GenericHourBlock(datetime=timezone.make_aware(datetime.datetime(year=year, month=month, day=day, hour=start_time)))
-        #newblock.save()
         print('second call', newBlock)
     newBlock.populate()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
@@ -257,6 +254,16 @@ def schedule_hour_block(request, year, month, day):
 # Function for changing the hour block type of a GenericHourBlock object
 # input (request, year, month, day, GenericHourBlock object/index)
 
+def unschedule_block(request,block_id, year,month,day):
+    day = int(request.POST['DAY'])
+    hourblock = GenericHourBlock.objects.get(pk=block_id)
+    hourblock.unschedule()
+    return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
+
+# Function for changing the hour block type
+def change_block_type(request, block_id, year, month, day):
+    day = int(request.POST['DAY'])
+    return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
 class UserAlerts:
     def send_user_invalid_input(input_string, request, year, month, day):

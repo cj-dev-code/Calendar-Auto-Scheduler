@@ -26,6 +26,7 @@ class GenericTask(models.Model):
         if self.deadline == None:
             return make_aware(datetime.max - timedelta(days=365))
         return self.deadline - self.est_time_to_complete
+
     class Meta:
         get_latest_by = 'time_created'
         
