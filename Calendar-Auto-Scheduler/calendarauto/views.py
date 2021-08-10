@@ -254,14 +254,16 @@ def schedule_hour_block(request, year, month, day):
 # Function for changing the hour block type of a GenericHourBlock object
 # input (request, year, month, day, GenericHourBlock object/index)
 
-def unschedule_block(request,block_id, year,month,day):
+def unschedule_block(request, year,month,day):
+    block_id = int(request.POST['block_id'])
     day = int(request.POST['DAY'])
     hourblock = GenericHourBlock.objects.get(pk=block_id)
     hourblock.unschedule()
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
 # Function for changing the hour block type
-def change_block_type(request, block_id, year, month, day):
+def change_block_type(request, year, month, day):
+    block_id = int(request.POST['block_id'])
     day = int(request.POST['DAY'])
     return HttpResponseRedirect(reverse('calendarauto:calendar_view', args=(year, month, day)))
 
